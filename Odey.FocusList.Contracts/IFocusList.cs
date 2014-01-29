@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Odey.FocusList.Contracts
 {
-    [ServiceContract(Namespace = "Odey.ClientServices.Contracts")]
+    [ServiceContract(Namespace = "Odey.FocusList.Contracts")]
     public interface IFocusList
     {
         [OperationContract]

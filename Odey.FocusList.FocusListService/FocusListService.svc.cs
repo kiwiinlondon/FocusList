@@ -1,4 +1,5 @@
 ﻿using Odey.FocusList.Contracts;
+using Odey.Framework.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,11 @@ using System.Text;
 
 namespace Odey.FocusList.FocusListService
 {
-    public class FocusListService : IFocusList
+    public class FocusListService : OdeyServiceBase,  IFocusList
     {       
         public void ImportExisting()
         {
-            throw new NotImplementedException();
+            Logger.Info("Hello World");
         }
     }
 }
