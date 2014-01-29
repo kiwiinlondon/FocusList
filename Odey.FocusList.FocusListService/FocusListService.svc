@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Odey.FocusList.FocusListService.FocusListService" CodeBehind="FocusListService.svc.cs" %>
