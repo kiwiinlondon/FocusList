@@ -6,19 +6,37 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using OF=Odey.Framework.Keeley.Entities;
 
 namespace Odey.FocusList.Clients
 {
     public class FocusListClient : OdeyClientBase<IFocusList>, IFocusList
     {
-        
 
-        public void ImportExisting()
+
+  
+        public void Save(OF.FocusList focusList)
         {
             IFocusList proxy = factory.CreateChannel();
             try
             {
-                proxy.ImportExisting();
+                proxy.Save(focusList);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
+
+
+        public void SaveList(List<OF.FocusList> focusList)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.SaveList(focusList);
                 ((ICommunicationObject)proxy).Close();
             }
             catch

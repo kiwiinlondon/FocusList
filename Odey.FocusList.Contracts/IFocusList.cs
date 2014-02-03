@@ -4,6 +4,7 @@ using System.Linq;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using OF = Odey.Framework.Keeley.Entities;
 
 namespace Odey.FocusList.Contracts
 {
@@ -11,6 +12,9 @@ namespace Odey.FocusList.Contracts
     public interface IFocusList
     {
         [OperationContract]
-        void ImportExisting();
+        void Save(OF.FocusList focusList);
+
+        [OperationContract]
+        void SaveList(List<OF.FocusList> focusList);
     }
 }

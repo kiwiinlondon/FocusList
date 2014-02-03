@@ -36,6 +36,9 @@
     <Reference Include="Odey.Framework.Infrastructure.Contracts">
       <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Contracts.dll</HintPath>
     </Reference>
+    <Reference Include="Odey.Framework.Keeley.Entities">
+      <HintPath>..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceModelEx.IdentityCallStack">
       <HintPath>..\Binaries\ServiceModelEx\ServiceModelEx.IdentityCallStack.dll</HintPath>
     </Reference>
