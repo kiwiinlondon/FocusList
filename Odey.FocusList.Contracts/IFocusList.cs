@@ -16,5 +16,8 @@ namespace Odey.FocusList.Contracts
 
         [OperationContract]
         void SaveList(List<OF.FocusList> focusList);
+
+        [OperationContract]
+        void UpdatePrice(OF.Price price);
     }
 }

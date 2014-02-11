@@ -57,6 +57,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.Enums.dll</HintPath>
     </Reference>
+    <Reference Include="Odey.MarketData.Clients, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Binaries\Odey.MarketData\Odey.MarketData.Clients.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.MarketData.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Binaries\Odey.MarketData\Odey.MarketData.Contracts.dll</HintPath>
+    </Reference>
     <Reference Include="Odey.StaticServices.Clients, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Binaries\Odey.StaticServices\Odey.StaticServices.Clients.dll</HintPath>

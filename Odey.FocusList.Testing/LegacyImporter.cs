@@ -10,6 +10,7 @@ using System.Linq;
 using System.Web;
 using Odey.Framework.Keeley.Entities;
 using ServiceModelEx;
+using Odey.MarketData.Clients;
 
 namespace Odey.FocusList.Testing
 {
@@ -92,7 +93,7 @@ namespace Odey.FocusList.Testing
                 int legacyAnalystId = int.Parse(row["analystid"].ToString());
                 int? analystId = GetUserId(legacyAnalystId);
                 if (analystId.HasValue)
-                {                    
+                {
                     OFE.FocusList focusList = new OFE.FocusList();
                     focusLists.Add(focusList);
 
@@ -127,6 +128,16 @@ namespace Odey.FocusList.Testing
                     {
                         focusList.StartOfYearPrice = Decimal.Parse(sypoverride);
                     }
+                    DateTime referenceDateForPrice = DateTime.Today;
+                    if (focusList.OutDate.HasValue)
+                    {
+                        referenceDateForPrice = focusList.OutDate.Value.Date;
+                    }
+                    PriceClient client = new PriceClient();
+                    Price price = client.Get(focusList.InstrumentMarketId, (int)EntityRankingSchemeIds.Default, referenceDateForPrice);
+
+                    focusList.CurrentPrice = price.Value;
+                    focusList.CurrentPriceId = price.PriceId;
                 }
             }
             return focusLists;

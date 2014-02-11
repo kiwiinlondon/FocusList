@@ -45,5 +45,21 @@ namespace Odey.FocusList.Clients
                 throw;
             }
         }
+
+
+        public void UpdatePrice(OF.Price price)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.UpdatePrice(price);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
     }
 }

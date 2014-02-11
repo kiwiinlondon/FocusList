@@ -69,6 +69,12 @@
     <Reference Include="Odey.Framework.Keeley.Entities.KeeleyModel">
       <HintPath>..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.KeeleyModel.dll</HintPath>
     </Reference>
+    <Reference Include="Odey.MarketData.Clients">
+      <HintPath>..\Binaries\Odey.MarketData\Odey.MarketData.Clients.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.MarketData.Contracts">
+      <HintPath>..\Binaries\Odey.MarketData\Odey.MarketData.Contracts.dll</HintPath>
+    </Reference>
     <Reference Include="Odey.StaticServices.Clients">
       <HintPath>..\Binaries\Odey.StaticServices\Odey.StaticServices.Clients.dll</HintPath>
     </Reference>

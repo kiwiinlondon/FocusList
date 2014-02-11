@@ -1,5 +1,7 @@
 ﻿using Odey.FocusList.Contracts;
 using Odey.Framework.Infrastructure.Services;
+using Odey.Framework.Keeley.Entities.Enums;
+using Odey.MarketData.Clients;
 using ServiceModelEx;
 using System;
 using System.Collections.Generic;
@@ -22,27 +24,13 @@ namespace Odey.FocusList.FocusListService
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
                 OF.FocusList existingFocusList = context.FocusLists.FirstOrDefault(a => a.InstrumentMarketId == focusList.InstrumentMarketId);
-                if (existingFocusList == null)
-                {
-                    context.FocusLists.Add(focusList);
-                }
-                else
-                {
-                    existingFocusList.AnalystId = focusList.AnalystId;
-                    existingFocusList.InDate = focusList.InDate;
-                    existingFocusList.InPrice = focusList.InPrice;
-                    existingFocusList.IsLong = focusList.IsLong;
-                    existingFocusList.OutDate = focusList.OutDate;
-                    existingFocusList.OutPrice = focusList.OutPrice;
-                    existingFocusList.StartOfYearPrice = focusList.StartOfYearPrice;
-                }
+                ApplyFocusList(focusList, context, existingFocusList);
                 context.SaveChanges();
             }
         }
-
-        private void Save(OF.FocusList newFocusList, OF.KeeleyModel context, OF.FocusList existingFocusList)
+      
+        private void ApplyFocusList(OF.FocusList newFocusList, OF.KeeleyModel context, OF.FocusList existingFocusList)
         {
-
             if (existingFocusList == null)
             {
                 context.FocusLists.Add(newFocusList);
@@ -53,25 +41,41 @@ namespace Odey.FocusList.FocusListService
                 existingFocusList.InDate = newFocusList.InDate;
                 existingFocusList.InPrice = newFocusList.InPrice;
                 existingFocusList.IsLong = newFocusList.IsLong;
+                existingFocusList.CurrentPrice = newFocusList.CurrentPrice;
+                existingFocusList.CurrentPriceId = newFocusList.CurrentPriceId;                
                 existingFocusList.OutDate = newFocusList.OutDate;
                 existingFocusList.OutPrice = newFocusList.OutPrice;
                 existingFocusList.StartOfYearPrice = newFocusList.StartOfYearPrice;
             }
-
         }
 
         public void SaveList(List<OF.FocusList> focusLists)
         {
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
-                Dictionary<int, OF.FocusList> existingFocusList = context.FocusLists.ToDictionary(a => a.InstrumentMarketId, a => a);
+                Dictionary<Tuple<int,DateTime?>, OF.FocusList> existingFocusList = context.FocusLists.ToDictionary(a => new Tuple<int,DateTime?>( a.InstrumentMarketId,a.OutDate), a => a);
                 foreach (OF.FocusList focusListEntry in focusLists)
                 {
                     OF.FocusList existingFocusListEntry = null;
-                    existingFocusList.TryGetValue(focusListEntry.InstrumentMarketId, out existingFocusListEntry);
-                    Save(focusListEntry,context,existingFocusListEntry);
+                    Tuple<int, DateTime?> key = new Tuple<int, DateTime?>(focusListEntry.InstrumentMarketId, focusListEntry.OutDate);
+                    existingFocusList.TryGetValue(key, out existingFocusListEntry);
+                    ApplyFocusList(focusListEntry,context,existingFocusListEntry);
                 }                
                 context.SaveChanges();
+            }
+        }
+
+
+        public void UpdatePrice(OF.Price price)
+        {
+            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
+            {
+                OF.FocusList focusList = context.FocusLists.Where(a => a.CurrentPriceId == price.PriceId && !a.OutDate.HasValue).FirstOrDefault();
+                if (focusList != null)
+                {
+                    focusList.CurrentPrice = price.Value;
+                    context.SaveChanges();
+                }
             }
         }
     }
