@@ -68,7 +68,7 @@ namespace Odey.FocusList.Testing
             return bloombergTicker.Replace(" UN ", " US ").Replace(" SM ", " SQ ").Replace(" GR ", " GY ");
         }
 
-        private static int GetInstrumentMarketId(string bloombergTicker)
+        private static InstrumentMarket GetInstrumentMarketId(string bloombergTicker)
         {
             InstrumentMarketClient instrumentMarketClient = new InstrumentMarketClient();
             OFE.InstrumentMarket instrumentMarket = instrumentMarketClient.GetForIdentifierSettingUpIfNotPresent(IdentifierTypeIds.BBTicker, CleanTicker(bloombergTicker), false, (int)InstrumentClassIds.OrdinaryShare);
@@ -76,7 +76,7 @@ namespace Odey.FocusList.Testing
             {
                 throw new ApplicationException(String.Format("Unable to resolve Instrument Market for ticker {0}",bloombergTicker));
             }
-            return instrumentMarket.InstrumentMarketID;
+            return instrumentMarket;
         }
 
 
@@ -99,11 +99,12 @@ namespace Odey.FocusList.Testing
 
                     focusList.AnalystId = analystId.Value;
                     string bloombergTicker = row["ticker"].ToString();
-                    focusList.InstrumentMarketId = GetInstrumentMarketId(bloombergTicker);
+                    InstrumentMarket instrumentMarket = GetInstrumentMarketId(bloombergTicker);
+                    focusList.InstrumentMarketId = instrumentMarket.InstrumentMarketID;
                     string inDateString = row["indate"].ToString();
                     focusList.InDate = DateTime.Parse(inDateString);
                     string inPriceString = row["inprice"].ToString();
-                    focusList.InPrice = Decimal.Parse(inPriceString);
+                    focusList.InPrice = Decimal.Parse(inPriceString) / instrumentMarket.PriceQuoteMultiplier;
                     string outDateString = row["outdate"].ToString();
                     if (!string.IsNullOrWhiteSpace(outDateString))
                     {
@@ -112,7 +113,7 @@ namespace Odey.FocusList.Testing
                     string outPriceString = row["outprice"].ToString();
                     if (!string.IsNullOrWhiteSpace(outPriceString))
                     {
-                        focusList.OutPrice = Decimal.Parse(outPriceString);
+                        focusList.OutPrice = Decimal.Parse(outPriceString) / instrumentMarket.PriceQuoteMultiplier;
                     }
                     string direction = row["direction"].ToString();
                     if (direction == "0")
@@ -135,7 +136,7 @@ namespace Odey.FocusList.Testing
                     }
                     PriceClient client = new PriceClient();
                     Price price = client.Get(focusList.InstrumentMarketId, (int)EntityRankingSchemeIds.Default, referenceDateForPrice);
-
+                    
                     focusList.CurrentPrice = price.Value;
                     focusList.CurrentPriceId = price.PriceId;
                 }

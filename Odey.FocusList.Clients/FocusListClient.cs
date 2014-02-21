@@ -61,5 +61,21 @@ namespace Odey.FocusList.Clients
                 throw;
             }
         }
+
+
+        public void Reprice(DateTime repriceDate)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.Reprice(repriceDate);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
     }
 }

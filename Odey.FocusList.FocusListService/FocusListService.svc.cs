@@ -78,5 +78,22 @@ namespace Odey.FocusList.FocusListService
                 }
             }
         }
+
+
+        public void Reprice(DateTime repriceDate)
+        {
+            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
+            {
+                List<OF.FocusList> focusLists = context.FocusLists.Where(a=>!a.OutDate.HasValue).ToList();
+                foreach(OF.FocusList focusList in focusLists)
+                {
+                    PriceClient client = new PriceClient();
+                    OF.Price price = client.Get(focusList.InstrumentMarketId, (int)EntityRankingSchemeIds.Default, repriceDate);
+                    focusList.CurrentPrice = price.Value;
+                    focusList.CurrentPriceId = price.PriceId;
+                }
+                context.SaveChanges();
+            }
+        }
     }
 }
