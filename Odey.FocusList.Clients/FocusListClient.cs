@@ -77,5 +77,36 @@ namespace Odey.FocusList.Clients
                 throw;
             }
         }
+
+
+        public void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.Add(instrumentMarketId, inDate, inPrice, analystId, isLong);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
+
+        public void Remove(int instrumentMarketId,int analystId, decimal outPrice, DateTime outDate)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.Remove(instrumentMarketId, analystId, outPrice, outDate);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
     }
 }

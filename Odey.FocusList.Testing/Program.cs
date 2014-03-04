@@ -13,13 +13,14 @@ namespace Odey.FocusList.Testing
     {
         static void Main(string[] args)
         {
-            InstrumentClient client = new InstrumentClient();
-            client.RepullFromExternalSourceUsingId(31037);
-           // FocusListService.FocusListService client = new FocusListService.FocusListService();
-          //  FocusListClient client = new FocusListClient();
-          //  client.Reprice(DateTime.Today);
+            ImportLegacy();  
 
-            ImportLegacy();            
+
+            FocusListService.FocusListService client = new FocusListService.FocusListService();
+          //  FocusListClient client = new FocusListClient();
+          //  client.Add(7244, new DateTime(2013,9,20),3.48M, 89, false);
+            client.Remove(7244, 89, 3.48M, DateTime.Today);
+                      
         }
 
         public static void ImportLegacy()

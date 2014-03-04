@@ -56,6 +56,8 @@ namespace Odey.FocusList.Testing
                     return 87;
                 case 25:  //Aubrey
                     return 89;
+                case 26:  //Tricio Ho
+                    return 93;
                 default:
                     throw new ApplicationException(String.Format("Unknown known legacy user id {0}", legacyUserId));
 
@@ -82,7 +84,7 @@ namespace Odey.FocusList.Testing
 
         public static List<OFE.FocusList> GetLegacyTransformed()
         {
-            var connectionString = "Data Source = C:\\temp\\tradeinput.sdf;Persist Security Info=False";
+            var connectionString = "Data Source = C:\\Temp\\Focus List\\tradeinput.sdf;Persist Security Info=False";
             var adapter = new SqlCeDataAdapter("select * from positions", connectionString);
             DataSet ds = new DataSet();
             adapter.Fill(ds);
@@ -127,7 +129,7 @@ namespace Odey.FocusList.Testing
                     string sypoverride = row["sypoverride"].ToString();
                     if (!string.IsNullOrWhiteSpace(sypoverride))
                     {
-                        focusList.StartOfYearPrice = Decimal.Parse(sypoverride);
+                        focusList.StartOfYearPrice = Decimal.Parse(sypoverride) / instrumentMarket.PriceQuoteMultiplier;
                     }
                     DateTime referenceDateForPrice = DateTime.Today;
                     if (focusList.OutDate.HasValue)
@@ -135,8 +137,7 @@ namespace Odey.FocusList.Testing
                         referenceDateForPrice = focusList.OutDate.Value.Date;
                     }
                     PriceClient client = new PriceClient();
-                    Price price = client.Get(focusList.InstrumentMarketId, (int)EntityRankingSchemeIds.Default, referenceDateForPrice);
-                    
+                    Price price = client.Get(focusList.InstrumentMarketId, (int)EntityRankingSchemeIds.Default, referenceDateForPrice);                    
                     focusList.CurrentPrice = price.Value;
                     focusList.CurrentPriceId = price.PriceId;
                 }

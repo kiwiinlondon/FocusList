@@ -22,5 +22,11 @@ namespace Odey.FocusList.Contracts
 
         [OperationContract]
         void Reprice(DateTime repriceDate);
+
+        [OperationContract]
+        void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong);
+
+        [OperationContract]
+        void Remove(int instrumentMarketId, int analystId, decimal outPrice, DateTime outDate);
     }
 }
