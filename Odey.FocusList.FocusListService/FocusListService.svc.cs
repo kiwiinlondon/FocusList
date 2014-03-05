@@ -118,12 +118,12 @@ namespace Odey.FocusList.FocusListService
                 context.FocusLists.Add(focusList);
                 focusList.AnalystId = analystId;
                 focusList.InDate = inDate;
-                focusList.InPrice = inPrice;
-                focusList.EndOfYearPrice = inPrice;
+                focusList.InPrice = inPrice;                
                 focusList.IsLong = isLong;
                 focusList.InstrumentMarketId = instrumentMarketId;                
                 PriceClient client = new PriceClient();
-                PriceFocusList(client, focusList, DateTime.Today);                
+                PriceFocusList(client, focusList, DateTime.Today);
+                focusList.EndOfYearPrice = inPrice;
                 CheckPrice(focusList.InPrice, focusList, context, "In");
                 
                 context.SaveChanges();
@@ -142,7 +142,7 @@ namespace Odey.FocusList.FocusListService
         private void PriceFocusList(PriceClient client, OF.FocusList focusList, DateTime referenceDate)
         {
             OF.Price price = client.Get(focusList.InstrumentMarketId, (int)EntityRankingSchemeIds.Default, referenceDate);
-            if (focusList.CurrentPriceDate.Year < price.ReferenceDate.Year)
+            if (focusList.FocusListId> 0 && focusList.CurrentPriceDate.Year < price.ReferenceDate.Year)
             {
                 focusList.EndOfYearPrice = focusList.CurrentPrice;
             }            
