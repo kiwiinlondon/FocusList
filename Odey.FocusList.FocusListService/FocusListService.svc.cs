@@ -135,7 +135,7 @@ namespace Odey.FocusList.FocusListService
             if (Math.Abs((priceToCompare - focusList.CurrentPrice) / priceToCompare) > .1m)
             {
                 OF.InstrumentMarket instrumentMarket = context.InstrumentMarkets.Where(a => a.InstrumentMarketID == focusList.InstrumentMarketId).FirstOrDefault();
-                throw new ApplicationException(String.Format("{0} Price of {1} is more than 10% different than current price of {2} for {3}",priceType, Math.Round(focusList.InPrice, 2), Math.Round(focusList.CurrentPrice, 2), instrumentMarket.BloombergTicker));
+               // throw new ApplicationException(String.Format("{0} Price of {1} is more than 10% different than current price of {2} for {3}",priceType, Math.Round(focusList.InPrice, 2), Math.Round(focusList.CurrentPrice, 2), instrumentMarket.BloombergTicker));
             }
         }
 
