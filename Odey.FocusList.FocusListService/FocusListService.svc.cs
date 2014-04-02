@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Data.Entity;
 using OF = Odey.Framework.Keeley.Entities;
 
 namespace Odey.FocusList.FocusListService
@@ -100,7 +101,7 @@ namespace Odey.FocusList.FocusListService
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
                 OF.FocusList existing = context.FocusLists.Where(a => a.InstrumentMarketId == instrumentMarketId && !a.OutDate.HasValue).FirstOrDefault();
-                
+                OF.InstrumentMarket instrumentMarket = context.InstrumentMarkets.Include(a=>a.Instrument.Issuer.IssuerIndustries).Where(a => a.InstrumentMarketID == instrumentMarketId).FirstOrDefault();
                 if (existing != null)
                 {
                     if (existing.InDate== inDate && existing.InPrice == inPrice && existing.IsLong == isLong && existing.AnalystId == analystId)
@@ -109,7 +110,6 @@ namespace Odey.FocusList.FocusListService
                     }
                     else
                     {
-                        OF.InstrumentMarket instrumentMarket = context.InstrumentMarkets.Where(a=>a.InstrumentMarketID == instrumentMarketId).FirstOrDefault();
                         OF.ApplicationUser analyst = context.ApplicationUsers.Where(a => a.UserID == existing.AnalystId).FirstOrDefault();
                         throw new ApplicationException(String.Format("{0} already has an open Focus List entry for {1}", analyst.Name,instrumentMarket.BloombergTicker));
                     }
@@ -120,7 +120,8 @@ namespace Odey.FocusList.FocusListService
                 focusList.InDate = inDate;
                 focusList.InPrice = inPrice;                
                 focusList.IsLong = isLong;
-                focusList.InstrumentMarketId = instrumentMarketId;                
+                focusList.InstrumentMarketId = instrumentMarketId;
+                
                 PriceClient client = new PriceClient();
                 PriceFocusList(client, focusList, DateTime.Today);
                 focusList.EndOfYearPrice = inPrice;
