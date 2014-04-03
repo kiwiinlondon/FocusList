@@ -46,7 +46,6 @@ namespace Odey.FocusList.FocusListService
                 existingFocusList.CurrentPriceId = newFocusList.CurrentPriceId;                
                 existingFocusList.OutDate = newFocusList.OutDate;
                 existingFocusList.OutPrice = newFocusList.OutPrice;
-                existingFocusList.StartOfYearPrice = newFocusList.StartOfYearPrice;
             }
         }
 

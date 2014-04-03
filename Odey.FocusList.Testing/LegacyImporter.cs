@@ -127,10 +127,7 @@ namespace Odey.FocusList.Testing
                         focusList.IsLong = false;
                     }
                     string sypoverride = row["sypoverride"].ToString();
-                    if (!string.IsNullOrWhiteSpace(sypoverride))
-                    {
-                        focusList.StartOfYearPrice = Decimal.Parse(sypoverride) / instrumentMarket.PriceQuoteMultiplier;
-                    }
+     
                     DateTime referenceDateForPrice = DateTime.Today;
                     if (focusList.OutDate.HasValue)
                     {
