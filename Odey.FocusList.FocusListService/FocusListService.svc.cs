@@ -95,13 +95,27 @@ namespace Odey.FocusList.FocusListService
             }
         }
 
-
+        private int GetRelativeIndexId(OF.KeeleyModel context,int issuerId)
+        {
+            OF.Industry subIndustry = context.IssuerIndustries.Include(a=>a.Industry).Where(a=>a.IssuerID == issuerId && a.IndustryClassificationID == (int)IndustryClassificationIds.GICS).Select(a=>a.Industry).First();
+            if (subIndustry.IndustryID == (int)IndustryIds.GICSUnclassifiedSubIndustry)
+            {
+                throw new ApplicationException(String.Format("Issuer {0} does not have GICS industry so cannot establish relative index", issuerId));
+            }
+            OF.Industry industry = context.Industries.Where(a => a.IndustryID == subIndustry.ParentIndustryID).First();
+            OF.Industry industryGroup = context.Industries.Where(a => a.IndustryID == industry.ParentIndustryID).First();
+            if (!industryGroup.RelativeIndexInstrumentMarketId.HasValue)
+            {
+                throw new ApplicationException(String.Format("Industry Group {0} does not have index",industryGroup.Name));
+            }
+            return industryGroup.RelativeIndexInstrumentMarketId.Value;
+        }
         public void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong)
         {
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
                 OF.FocusList existing = context.FocusLists.Where(a => a.InstrumentMarketId == instrumentMarketId && !a.OutDate.HasValue).FirstOrDefault();
-                OF.InstrumentMarket instrumentMarket = context.InstrumentMarkets.Include(a=>a.Instrument.Issuer.IssuerIndustries).Where(a => a.InstrumentMarketID == instrumentMarketId).FirstOrDefault();
+                OF.InstrumentMarket instrumentMarket = context.InstrumentMarkets.Include(a=>a.Instrument).Where(a => a.InstrumentMarketID == instrumentMarketId).FirstOrDefault();
                 if (existing != null)
                 {
                     if (existing.InDate== inDate && existing.InPrice == inPrice && existing.IsLong == isLong && existing.AnalystId == analystId)
@@ -116,6 +130,7 @@ namespace Odey.FocusList.FocusListService
                 }
                 OF.FocusList focusList = new OF.FocusList();
                 context.FocusLists.Add(focusList);
+                int relativeIndexInstrumentMarketId = GetRelativeIndexId(context, instrumentMarket.IssuerID);
                 focusList.AnalystId = analystId;
                 focusList.InDate = inDate;
                 focusList.InPrice = inPrice;                
