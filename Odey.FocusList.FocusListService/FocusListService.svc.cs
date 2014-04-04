@@ -70,7 +70,7 @@ namespace Odey.FocusList.FocusListService
         {
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
-                OF.FocusList focusList = context.FocusLists.Where(a => a.CurrentPriceId == price.PriceId && !a.OutDate.HasValue).FirstOrDefault();
+                OF.FocusList focusList = context.FocusLists.Where(a => (a.CurrentPriceId == price.PriceId || a.RelativeCurrentPriceId == price.PriceId) && !a.OutDate.HasValue).FirstOrDefault();
                 if (focusList != null)
                 {
                     focusList.CurrentPrice = price.Value;
