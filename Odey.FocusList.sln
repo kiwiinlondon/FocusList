@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30324.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.FocusList", "Odey.FocusList\Odey.FocusList.csproj", "{757A1CBA-1789-4F3F-97BA-25E2C1AD947B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.FocusList.FocusListService", "Odey.FocusList.FocusListService\Odey.FocusList.FocusListService.csproj", "{C81E2DE7-7990-429B-93F8-4F7D63B7E316}"
@@ -10,6 +12,13 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.FocusList.Clients", "Odey.FocusList.Clients\Odey.FocusList.Clients.csproj", "{E56C104B-D9F6-403D-AD30-74A0502FA513}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Odey.FocusList.Testing", "Odey.FocusList.Testing\Odey.FocusList.Testing.csproj", "{E1659EAB-F90A-4C67-BD80-A15DD2587894}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{E34BDCE4-CCE0-4E04-B84C-56A315EC3CEE}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

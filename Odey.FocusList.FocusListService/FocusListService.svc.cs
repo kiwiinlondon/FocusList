@@ -1,25 +1,19 @@
-﻿using Odey.FocusList.Contracts;
+﻿
+using System;
+using System.Linq;
+using System.Data.Entity;
+using System.Collections.Generic;
+using Odey.FocusList.Contracts;
 using Odey.Framework.Infrastructure.Services;
 using Odey.Framework.Keeley.Entities.Enums;
 using Odey.MarketData.Clients;
 using ServiceModelEx;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
-using System.Data.Entity;
 using OF = Odey.Framework.Keeley.Entities;
 
 namespace Odey.FocusList.FocusListService
 {
     public class FocusListService : OdeyServiceBase, IFocusList
     {
-
-        
-
         public void Save(OF.FocusList focusList)
         {
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
