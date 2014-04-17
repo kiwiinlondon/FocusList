@@ -13,12 +13,9 @@ namespace Odey.FocusList.Testing
     {
         static void Main(string[] args)
         {
-          //  FocusListService.FocusListService client = new FocusListService.FocusListService();
           
             FocusListClient client = new FocusListClient();
-            client.Reprice(DateTime.Today);
-            client.Add(20126, DateTime.Today, 4.5M, 81, true);
-            client.Remove(7244, 89, 3.48M, DateTime.Today);
+            client.Add(20149, DateTime.Parse("28-Mar-2014"), 0.345M, 82, true);
                       
         }
 

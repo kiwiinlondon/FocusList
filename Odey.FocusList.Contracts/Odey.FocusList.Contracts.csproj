@@ -29,6 +29,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseDebug|AnyCPU'">
+    <OutputPath>bin\ReleaseDebug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'UAT|AnyCPU'">
+    <OutputPath>bin\UAT\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Odey.Framework.Keeley.Entities">
       <HintPath>..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.dll</HintPath>
