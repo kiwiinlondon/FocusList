@@ -9,6 +9,7 @@ using Odey.Framework.Keeley.Entities.Enums;
 using Odey.MarketData.Clients;
 using ServiceModelEx;
 using OF = Odey.Framework.Keeley.Entities;
+using Odey.CodeRed.Clients;
 
 namespace Odey.FocusList.FocusListService
 {
@@ -138,7 +139,7 @@ namespace Odey.FocusList.FocusListService
                 CheckPrice(focusList.InPrice, focusList, context, "In");
                 focusList.RelativeInPrice = focusList.RelativeCurrentPrice;
                 focusList.RelativeEndOfYearPrice = focusList.RelativeInPrice;
-
+                RemoveFromCodeRed(instrumentMarket);
                 context.SaveChanges();
             }
         }
@@ -178,9 +179,9 @@ namespace Odey.FocusList.FocusListService
             {
                 OF.FocusList existing = context.FocusLists.Where(a => a.InstrumentMarketId == instrumentMarketId && !a.OutDate.HasValue && a.AnalystId == analystId).FirstOrDefault();
 
+                OF.InstrumentMarket instrumentMarket = context.InstrumentMarkets.Where(a => a.InstrumentMarketID == instrumentMarketId).FirstOrDefault();
                 if (existing == null)
-                {
-                    OF.InstrumentMarket instrumentMarket = context.InstrumentMarkets.Where(a => a.InstrumentMarketID == instrumentMarketId).FirstOrDefault();
+                {                    
                     OF.ApplicationUser analyst = context.ApplicationUsers.Where(a => a.UserID == analystId).FirstOrDefault();
                     throw new ApplicationException(String.Format("Analyst {0} has no open Focus List entry for {1} to close", analyst.Name, instrumentMarket.BloombergTicker));
                 }
@@ -188,7 +189,43 @@ namespace Odey.FocusList.FocusListService
                 existing.OutDate = outDate;
                 CheckPrice(existing.OutPrice.Value, existing, context, "Out");
                 existing.RelativeOutPrice = existing.RelativeCurrentPrice;
+                RemoveFromCodeRed(instrumentMarket);
                 context.SaveChanges();
+            }
+        }
+
+        private void AddToCodeRed(OF.InstrumentMarket instrumentMarket,bool isLong)
+        {
+            CodeRedClient client = new CodeRedClient();
+            client.AddToFocusList(instrumentMarket.BloombergTicker, isLong);
+        }
+
+        private void RemoveFromCodeRed(OF.InstrumentMarket instrumentMarket)
+        {
+            CodeRedClient client = new CodeRedClient();
+            client.RemoveFromFocusList(instrumentMarket.BloombergTicker);
+        }
+
+        public void BringCodeRedInLine()
+        {
+            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
+            {
+                List<OF.FocusList> actualFocusList = context.FocusLists.Where(a => !a.OutDate.HasValue).ToList();
+                CodeRedClient client = new CodeRedClient();
+                List<string> codeRedFocusList = client.GetOpenFocusList();
+                foreach (OF.FocusList focusList in actualFocusList)
+                {
+                    OF.InstrumentMarket instrumentMarket = context.InstrumentMarkets.Where(a => a.InstrumentMarketID == focusList.InstrumentMarketId).FirstOrDefault();
+                    if (codeRedFocusList.Contains(instrumentMarket.BloombergTicker))
+                    {
+                        codeRedFocusList.Remove(instrumentMarket.BloombergTicker);
+                    }
+                    client.AddToFocusList(instrumentMarket.BloombergTicker, focusList.IsLong);
+                }
+                foreach (string ticker in codeRedFocusList)
+                {
+                    client.RemoveFromFocusList(ticker);
+                }                
             }
         }
     }

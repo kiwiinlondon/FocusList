@@ -49,6 +49,12 @@
       <HintPath>..\Binaries\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Odey.CodeRed.Clients">
+      <HintPath>..\Binaries\Odey.CodeRed\Odey.CodeRed.Clients.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.CodeRed.Contracts">
+      <HintPath>..\Binaries\Odey.CodeRed\Odey.CodeRed.Contracts.dll</HintPath>
+    </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Caches">
       <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Caches.dll</HintPath>
     </Reference>
