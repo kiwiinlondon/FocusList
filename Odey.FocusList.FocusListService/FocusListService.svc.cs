@@ -68,7 +68,14 @@ namespace Odey.FocusList.FocusListService
                 OF.FocusList focusList = context.FocusLists.Where(a => (a.CurrentPriceId == price.PriceId || a.RelativeCurrentPriceId == price.PriceId) && !a.OutDate.HasValue).FirstOrDefault();
                 if (focusList != null)
                 {
-                    focusList.CurrentPrice = price.Value;
+                    if (price.PriceId == focusList.CurrentPriceId)
+                    {
+                        focusList.CurrentPrice = price.Value;
+                    }
+                    else if (price.PriceId == focusList.RelativeCurrentPriceId)
+                    {
+                        focusList.RelativeCurrentPrice = price.Value;
+                    }
                     context.SaveChanges();
                 }
             }
