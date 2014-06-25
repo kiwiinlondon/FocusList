@@ -146,7 +146,7 @@ namespace Odey.FocusList.FocusListService
                 CheckPrice(focusList.InPrice, focusList, context, "In");
                 focusList.RelativeInPrice = focusList.RelativeCurrentPrice;
                 focusList.RelativeEndOfYearPrice = focusList.RelativeInPrice;
-                RemoveFromCodeRed(instrumentMarket);
+                AddToCodeRed(instrumentMarket, isLong);
                 context.SaveChanges();
             }
         }
