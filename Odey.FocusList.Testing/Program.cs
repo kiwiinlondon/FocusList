@@ -14,15 +14,11 @@ namespace Odey.FocusList.Testing
         static void Main(string[] args)
         {
 
-            
-            FocusListService.FocusListService client = new FocusListService.FocusListService();
-          
-       //   FocusListClient client = new FocusListClient();
-            client.BringCodeRedInLine();
-            client.Reprice(DateTime.Today);
-            client.Add(20126, DateTime.Today, 4.5M, 81, true);
-            client.Remove(7244, 89, 3.48M, DateTime.Today);
-                      
+
+            //var s = new FocusListClient();
+            //var s = new FocusListService.FocusListService();
+            //s.Reprice(DateTime.Parse("31-Dec-2014"));  
+            var d = new DateTime(2015, 1, 2);
         }
 
         public static void ImportLegacy()

@@ -164,14 +164,7 @@ namespace Odey.FocusList.FocusListService
         {
             OF.Price price = client.Get(focusList.InstrumentMarketId, (int)EntityRankingSchemeIds.Default, referenceDate);
             OF.Price relativePrice = client.Get(focusList.RelativeIndexInstrumentMarketId, (int)EntityRankingSchemeIds.Default, referenceDate);
-            if (focusList.FocusListId > 0 && focusList.CurrentPriceDate.Year < price.ReferenceDate.Year)
-            {
-                focusList.EndOfYearPrice = focusList.CurrentPrice;
-            }
-            if (focusList.FocusListId > 0  && focusList.RelativeCurrentPriceDate.Year < relativePrice.ReferenceDate.Year)
-            {
-                focusList.RelativeEndOfYearPrice = focusList.RelativeCurrentPrice;
-            }
+           
             focusList.CurrentPrice = price.Value;
             focusList.CurrentPriceId = price.PriceId;
             focusList.CurrentPriceDate = price.ReferenceDate;
