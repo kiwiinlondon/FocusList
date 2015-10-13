@@ -205,7 +205,7 @@ namespace Odey.FocusList.FocusListService
                     // Add Idea with analystId
                     if (idea == null)
                     {
-                        Logger.InfoFormat($"New Analyst Idea  issuerId:{issuerId} - analystId:{analystId}");
+                        Logger.InfoFormat($"New Analyst Idea  issuerId:{issuerId} - analystId:{analystId} - date:{date}");
                         var newIdea = new OF.AnalystIdea()
                         {
                             IssuerId = issuerId,
@@ -217,19 +217,19 @@ namespace Odey.FocusList.FocusListService
                     }
                     else // Update idea
                     {
-                        if (idea.AnalystId != analystId)
-                        {
-                            Logger.InfoFormat($"Update Idea: {idea.AnalystIdeaId} with another userId: {analystId}");
-                        }
-                        else
-                        {
-                            Logger.InfoFormat($"Update Idea: {idea.AnalystIdeaId}");
-                        }
-
-                        // Only upodate newer dates
+                        // Only update newer dates
                         if (date >= idea.ResearchNoteLastReceived)
                         {
                             idea.ResearchNoteLastReceived = date;
+
+                            if (idea.AnalystId != analystId)
+                            {
+                                Logger.InfoFormat($"Update Idea: {idea.AnalystIdeaId} with another userId: {analystId} - date:{date}");
+                            }
+                            else
+                            {
+                                Logger.InfoFormat($"Update Idea: {idea.AnalystIdeaId} - date:{date}");
+                            }
                         }
                     }
 
