@@ -226,7 +226,11 @@ namespace Odey.FocusList.FocusListService
                             Logger.InfoFormat($"Update Idea: {idea.AnalystIdeaId}");
                         }
 
-                        idea.ResearchNoteLastReceived = date;
+                        // Only upodate newer dates
+                        if (date >= idea.ResearchNoteLastReceived)
+                        {
+                            idea.ResearchNoteLastReceived = date;
+                        }
                     }
 
                 }
