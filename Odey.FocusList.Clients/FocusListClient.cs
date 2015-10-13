@@ -109,7 +109,7 @@ namespace Odey.FocusList.Clients
             }
         }
 
-        public void ProcessAnalystIdea(int issuerId, int analystId, DateTime date)
+        public void ProcessAnalystIdea(int[] issuerId, int analystId, DateTime date)
         {
             IFocusList proxy = factory.CreateChannel();
             try

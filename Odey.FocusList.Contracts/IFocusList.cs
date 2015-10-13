@@ -30,6 +30,6 @@ namespace Odey.FocusList.Contracts
         void Remove(int instrumentMarketId, int analystId, decimal outPrice, DateTime outDate);
 
         [OperationContract]
-        void ProcessAnalystIdea(int issuerId, int analystId, DateTime date);
+        void ProcessAnalystIdea(int[] issuerId, int analystId, DateTime date);
     }
 }

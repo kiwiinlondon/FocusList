@@ -194,41 +194,45 @@ namespace Odey.FocusList.FocusListService
             }
         }
 
-        public void ProcessAnalystIdea(int issuerId, int analystId, DateTime date)
+        public void ProcessAnalystIdea(int[] issuerIds, int analystId, DateTime date)
         {
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
-                var idea = context.AnalystIdeas.SingleOrDefault(ai => ai.IssuerId == issuerId);
-
-                // Add Idea with analystId
-                if (idea == null)
+                foreach (int issuerId in issuerIds)
                 {
-                    Logger.InfoFormat($"New Analyst Idea  issuerId:{issuerId} - analystId:{analystId}");
-                    var newIdea = new OF.AnalystIdea()
-                    {
-                        IssuerId = issuerId,
-                        AnalystId = analystId,
-                        ResearchNoteLastReceived =  date
-                    };
+                    var idea = context.AnalystIdeas.SingleOrDefault(ai => ai.IssuerId == issuerId);
 
-                    context.AnalystIdeas.Add(newIdea);
-                }
-                else // Update idea
-                {
-                    if (idea.AnalystId != analystId)
+                    // Add Idea with analystId
+                    if (idea == null)
                     {
-                        Logger.InfoFormat($"Update Idea: {idea.AnalystIdeaId} with another userId: {analystId}");
+                        Logger.InfoFormat($"New Analyst Idea  issuerId:{issuerId} - analystId:{analystId}");
+                        var newIdea = new OF.AnalystIdea()
+                        {
+                            IssuerId = issuerId,
+                            AnalystId = analystId,
+                            ResearchNoteLastReceived =  date
+                        };
+
+                        context.AnalystIdeas.Add(newIdea);
                     }
-                    else
+                    else // Update idea
                     {
-                        Logger.InfoFormat($"Update Idea: {idea.AnalystIdeaId}");
+                        if (idea.AnalystId != analystId)
+                        {
+                            Logger.InfoFormat($"Update Idea: {idea.AnalystIdeaId} with another userId: {analystId}");
+                        }
+                        else
+                        {
+                            Logger.InfoFormat($"Update Idea: {idea.AnalystIdeaId}");
+                        }
+
+                        idea.ResearchNoteLastReceived = date;
                     }
 
-                    idea.ResearchNoteLastReceived = date;
                 }
-
                 context.SaveChanges();
             }
+
         }
 
         private void AddToCodeRed(OF.InstrumentMarket instrumentMarket,bool isLong)
