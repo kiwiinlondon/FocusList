@@ -108,5 +108,20 @@ namespace Odey.FocusList.Clients
                 throw;
             }
         }
+
+        public void ProcessAnalystIdea(int issuerId, int analystId, DateTime date)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.ProcessAnalystIdea(issuerId, analystId, date);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
     }
 }

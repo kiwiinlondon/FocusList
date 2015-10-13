@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Data.Entity;
 using System.Collections.Generic;
+using log4net.Repository.Hierarchy;
 using Odey.FocusList.Contracts;
 using Odey.Framework.Infrastructure.Services;
 using Odey.Framework.Keeley.Entities.Enums;
@@ -80,7 +81,6 @@ namespace Odey.FocusList.FocusListService
                 }
             }
         }
-
 
         public void Reprice(DateTime repriceDate)
         {
@@ -190,6 +190,43 @@ namespace Odey.FocusList.FocusListService
                 CheckPrice(existing.OutPrice.Value, existing, context, "Out");
                 existing.RelativeOutPrice = existing.RelativeCurrentPrice;
                 RemoveFromCodeRed(instrumentMarket);
+                context.SaveChanges();
+            }
+        }
+
+        public void ProcessAnalystIdea(int issuerId, int analystId, DateTime date)
+        {
+            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
+            {
+                var idea = context.AnalystIdeas.SingleOrDefault(ai => ai.IssuerId == issuerId);
+
+                // Add Idea with analystId
+                if (idea == null)
+                {
+                    Logger.InfoFormat($"New Analyst Idea  issuerId:{issuerId} - analystId:{analystId}");
+                    var newIdea = new OF.AnalystIdea()
+                    {
+                        IssuerId = issuerId,
+                        AnalystId = analystId,
+                        ResearchNoteLastReceived =  date
+                    };
+
+                    context.AnalystIdeas.Add(newIdea);
+                }
+                else // Update idea
+                {
+                    if (idea.AnalystId != analystId)
+                    {
+                        Logger.InfoFormat($"Update Idea: {idea.AnalystIdeaId} with another userId: {analystId}");
+                    }
+                    else
+                    {
+                        Logger.InfoFormat($"Update Idea: {idea.AnalystIdeaId}");
+                    }
+
+                    idea.ResearchNoteLastReceived = date;
+                }
+
                 context.SaveChanges();
             }
         }
