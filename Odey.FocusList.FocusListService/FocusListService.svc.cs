@@ -217,6 +217,7 @@ namespace Odey.FocusList.FocusListService
                     }
                     else // Update idea
                     {
+                        Logger.InfoFormat($"Update Idea: {idea.AnalystIdeaId} analistId:{analystId} - date:{idea.ResearchNoteLastReceived}");
                         // Only update newer dates
                         if (date >= idea.ResearchNoteLastReceived)
                         {
@@ -224,11 +225,11 @@ namespace Odey.FocusList.FocusListService
 
                             if (idea.AnalystId != analystId)
                             {
-                                Logger.InfoFormat($"Update Idea: {idea.AnalystIdeaId} with another userId: {analystId} - date:{date}");
+                                Logger.InfoFormat($"Update with another userId: {analystId} - date:{date}");
                             }
                             else
                             {
-                                Logger.InfoFormat($"Update Idea: {idea.AnalystIdeaId} - date:{date}");
+                                Logger.InfoFormat($"Update date:{date}");
                             }
                         }
                     }
