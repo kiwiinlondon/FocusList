@@ -29,7 +29,9 @@ WHERE
 
 
 --check
-SELECT dim.InstrumentName, dim.InstrumentMarketId, fl.CurrentPriceDate, fl.CurrentPrice, p1.Value AS Price2015, p2.Value AS PriceNow, fl.RelativeCurrentPrice, pRel1.Value AS Rel2015, pRel2.Value AS RelNow,
+SELECT dim.InstrumentName, dim.InstrumentMarketId, fl.CurrentPriceDate, fl.CurrentPrice, 
+p1.Value AS Price2015, p2.Value AS PriceNow, fl.RelativeCurrentPrice, pRel1.Value AS Rel2015, pRel2.Value AS RelNow,
+fl.EndOfYearPrice, fl.RelativeEndOfYearPrice,
 fl.* FROM dbo.FocusList fl
 LEFT JOIN dbo.DenormalisedInstrumentMarket dim ON dim.InstrumentMarketId = fl.InstrumentMarketId
 LEFT JOIN Price p1 ON p1.InstrumentMarketId = fl.InstrumentMarketId AND p1.ReferenceDate='31-Dec-2015'
@@ -81,6 +83,24 @@ WHERE
 ----------------
 -- restore dates in GetSinceYearEnd and GetShortSinceYearEnd in Odey.Reporting.Web.Internal.FocusList
 ---------------
+
+
+
+
+--check
+SELECT dim.InstrumentName, dim.InstrumentMarketId, fl.CurrentPriceDate, fl.CurrentPrice, 
+p1.Value AS Price2015, p2.Value AS PriceNow, fl.RelativeCurrentPrice, pRel1.Value AS Rel2015, pRel2.Value AS RelNow,
+fl.EndOfYearPrice, fl.RelativeEndOfYearPrice,
+fl.* FROM dbo.FocusList fl
+LEFT JOIN dbo.DenormalisedInstrumentMarket dim ON dim.InstrumentMarketId = fl.InstrumentMarketId
+LEFT JOIN Price p1 ON p1.InstrumentMarketId = fl.InstrumentMarketId AND p1.ReferenceDate='31-Dec-2015'
+LEFT JOIN Price p2 ON p2.InstrumentMarketId = fl.InstrumentMarketId AND p2.ReferenceDate='04-Jan-2016'
+LEFT JOIN Price pRel1 ON pRel1.InstrumentMarketId = fl.RelativeIndexInstrumentMarketId AND pRel1.ReferenceDate='31-Dec-2015'
+LEFT JOIN Price pRel2 ON pRel2.InstrumentMarketId = fl.RelativeIndexInstrumentMarketId AND pRel2.ReferenceDate='04-Jan-2016'
+WHERE fl.OutDate IS NULL
+ORDER BY dim.InstrumentName
+
+
 
 --drop temp table
 DROP TABLE FocusList2016NewYearBackup

@@ -1,4 +1,5 @@
-﻿using Odey.FocusList.Clients;
+﻿using Odey.CodeRed.Clients;
+using Odey.FocusList.Clients;
 using Odey.StaticServices.Clients;
 using System;
 using System.Collections.Generic;
@@ -15,10 +16,8 @@ namespace Odey.FocusList.Testing
         {
 
 
-            //var s = new FocusListClient();
-            //var s = new FocusListService.FocusListService();
-            //s.Reprice(DateTime.Parse("31-Dec-2014"));  
-            var d = new DateTime(2015, 1, 2);
+            var client = new CodeRedClient();
+            client.RemoveFromFocusList("ERICB SS Equity");
         }
 
         public static void ImportLegacy()

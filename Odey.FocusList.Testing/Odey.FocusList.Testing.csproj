@@ -47,6 +47,14 @@
     <Reference Include="log4net">
       <HintPath>..\Binaries\log4net\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Odey.CodeRed.Clients, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Binaries\Odey.CodeRed\Odey.CodeRed.Clients.dll</HintPath>
+    </Reference>
+    <Reference Include="Odey.CodeRed.Contracts, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Binaries\Odey.CodeRed\Odey.CodeRed.Contracts.dll</HintPath>
+    </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Clients">
       <HintPath>..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>
     </Reference>
