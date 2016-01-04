@@ -78,7 +78,9 @@ WHERE
     p.Value IS NOT NULL
 	AND fl.OutDate IS NULL
 
-
+----------------
+-- restore dates in GetSinceYearEnd and GetShortSinceYearEnd in Odey.Reporting.Web.Internal.FocusList
+---------------
 
 --drop temp table
 DROP TABLE FocusList2016NewYearBackup
