@@ -113,6 +113,8 @@ namespace Odey.FocusList.FocusListService
             }
             return industryGroup.RelativeIndexInstrumentMarketId.Value;
         }
+
+
         public void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong)
         {
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))

@@ -43,7 +43,9 @@ ORDER BY dim.InstrumentName
 
 SELECT * FROM dbo.Price WHERE InstrumentMarketId=20105 ORDER BY ReferenceDate desc
 
+----------------
 -- snapshot table with corrected prices
+--------------
 SELECT * INTO FocusList2015 FROM FocusList
 
 ----------------
@@ -104,3 +106,18 @@ ORDER BY dim.InstrumentName
 
 --drop temp table
 DROP TABLE FocusList2016NewYearBackup
+
+
+----------------
+-- insert end of year prices into FocusListPrices
+--------------
+
+SELECT 'INSERT INTO dbo.FocusListPrices(FocusListId,ReferenceDate,Price,AdjustmentFactor,RelativePrice) VALUES 	('
++ CONVERT(VARCHAR(30),f.FocusListId) +','			
++ '''' + convert(varchar, f.CurrentPriceDate, 106) +''','			
++ CONVERT(VARCHAR(30),f.CurrentPrice) +','
++ CASE WHEN f.AdjustmentFactorYTD IS null THEN 'null' ELSE CONVERT(VARCHAR(30),f.AdjustmentFactorYTD) END +','
++ CONVERT(VARCHAR(30),f.RelativeCurrentPrice) +
++ ')'
+FROM dbo.FocusList2015 f
+WHERE f.CurrentPriceDate='31-dec-2015'
