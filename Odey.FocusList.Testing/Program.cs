@@ -14,10 +14,8 @@ namespace Odey.FocusList.Testing
     {
         static void Main(string[] args)
         {
-
-
-            var client = new CodeRedClient();
-            client.RemoveFromFocusList("ERICB SS Equity");
+            var flClient = new FocusListClient();
+            flClient.Reprice(DateTime.Today);
         }
 
         public static void ImportLegacy()
