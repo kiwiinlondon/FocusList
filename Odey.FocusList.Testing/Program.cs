@@ -15,7 +15,7 @@ namespace Odey.FocusList.Testing
         static void Main(string[] args)
         {
             var flClient = new FocusListClient();
-            flClient.Reprice(DateTime.Today);
+            flClient.Add(24011, DateTime.Parse("08-apr-2016"), 48.742m, 87, true, true);
         }
 
         public static void ImportLegacy()

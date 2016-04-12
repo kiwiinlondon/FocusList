@@ -3,6 +3,8 @@ using System;
 using System.Linq;
 using System.Data.Entity;
 using System.Collections.Generic;
+using System.Reflection;
+using log4net;
 using log4net.Repository.Hierarchy;
 using Odey.FocusList.Contracts;
 using Odey.Framework.Infrastructure.Services;
@@ -16,6 +18,9 @@ namespace Odey.FocusList.FocusListService
 {
     public class FocusListService : OdeyServiceBase, IFocusList
     {
+
+        private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public void Save(OF.FocusList focusList)
         {
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
@@ -117,6 +122,7 @@ namespace Odey.FocusList.FocusListService
 
         public void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong, bool skipCodeRed = false)
         {
+            Logger.Info($"Adding to Focus List: instrumentMarketId {instrumentMarketId}, inDate {inDate}, inPrice {inPrice}, analystId {analystId}, isLong {isLong}, skipCodeRed {skipCodeRed}");
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
                 OF.FocusList existing = context.FocusLists.Where(a => a.InstrumentMarketId == instrumentMarketId && !a.OutDate.HasValue).FirstOrDefault();
@@ -150,9 +156,15 @@ namespace Odey.FocusList.FocusListService
                 focusList.RelativeEndOfYearPrice = focusList.RelativeInPrice;
                 if (!skipCodeRed)
                 {
+                    Logger.Info($"Adding to code red for instrumentMarketId {instrumentMarketId}");
                     AddToCodeRed(instrumentMarket, isLong);
                 }
+                else
+                {
+                    Logger.Info($"Skipping code red call for instrumentMarketId {instrumentMarketId}");
+                }
                 context.SaveChanges();
+                Logger.Info($"Add to Focus List instrumentMarketId {instrumentMarketId} now done");
             }
         }
 
