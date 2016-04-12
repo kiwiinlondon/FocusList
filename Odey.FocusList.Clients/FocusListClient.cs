@@ -79,12 +79,12 @@ namespace Odey.FocusList.Clients
         }
 
 
-        public void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong)
+        public void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong, bool skipCodeRed = false)
         {
             IFocusList proxy = factory.CreateChannel();
             try
             {
-                proxy.Add(instrumentMarketId, inDate, inPrice, analystId, isLong);
+                proxy.Add(instrumentMarketId, inDate, inPrice, analystId, isLong, skipCodeRed);
                 ((ICommunicationObject)proxy).Close();
             }
             catch

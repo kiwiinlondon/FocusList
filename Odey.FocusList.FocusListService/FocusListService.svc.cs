@@ -115,7 +115,7 @@ namespace Odey.FocusList.FocusListService
         }
 
 
-        public void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong)
+        public void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong, bool skipCodeRed = false)
         {
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
@@ -148,7 +148,10 @@ namespace Odey.FocusList.FocusListService
                 CheckPrice(focusList.InPrice, focusList, context, "In");
                 focusList.RelativeInPrice = focusList.RelativeCurrentPrice;
                 focusList.RelativeEndOfYearPrice = focusList.RelativeInPrice;
-                AddToCodeRed(instrumentMarket, isLong);
+                if (!skipCodeRed)
+                {
+                    AddToCodeRed(instrumentMarket, isLong);
+                }
                 context.SaveChanges();
             }
         }
