@@ -9,6 +9,8 @@
 /_ReSharper.*
 /packages
 
+.vs/
+
 # /Odey.FocusList/
 /Odey.FocusList/[Bb]in
 /Odey.FocusList/obj
