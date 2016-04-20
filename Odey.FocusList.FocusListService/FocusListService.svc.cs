@@ -147,6 +147,7 @@ namespace Odey.FocusList.FocusListService
                 focusList.InPrice = inPrice;                
                 focusList.IsLong = isLong;
                 focusList.InstrumentMarketId = instrumentMarketId;
+                focusList.IssuerId = instrumentMarket.IssuerID;
                 
                 PriceClient client = new PriceClient();
                 PriceFocusList(client, focusList, DateTime.Today);
