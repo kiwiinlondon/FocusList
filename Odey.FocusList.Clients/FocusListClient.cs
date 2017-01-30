@@ -123,5 +123,125 @@ namespace Odey.FocusList.Clients
                 throw;
             }
         }
+
+        public IEnumerable<OF.AnalystIdea> GetAllIdeas()
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                return proxy.GetAllIdeas();
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
+
+        public int CreateIdea(OF.AnalystIdea idea)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                return proxy.CreateIdea(idea);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
+
+        public void DeleteIdea(int id)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.DeleteIdea(id);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
+
+        public void SetAnalyst(int ideaId, int? userId)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.SetAnalyst(ideaId, userId);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
+
+        public void SetInternalOriginator(int ideaId, int? userId)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.SetInternalOriginator(ideaId, userId);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
+
+        public void SetInternalOriginator2(int ideaId, int? userId)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.SetInternalOriginator2(ideaId, userId);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
+
+        public void SetExternalOriginator(int ideaId, int? externalPersonId)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.SetExternalOriginator(ideaId, externalPersonId);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
+
+        public void SetOriginatingDate(int ideaId, DateTime originatingDate)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.SetOriginatingDate(ideaId, originatingDate);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
     }
 }

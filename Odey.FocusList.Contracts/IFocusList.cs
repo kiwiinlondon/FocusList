@@ -31,5 +31,30 @@ namespace Odey.FocusList.Contracts
 
         [OperationContract]
         void ProcessAnalystIdea(int[] issuerId, int analystId, DateTime date);
+
+        [OperationContract]
+        IEnumerable<OF.AnalystIdea> GetAllIdeas();
+
+        [OperationContract]
+        int CreateIdea(OF.AnalystIdea idea);
+
+        [OperationContract]
+        void DeleteIdea(int id);
+
+        [OperationContract]
+        void SetAnalyst(int ideaId, int? userId);
+
+        [OperationContract]
+        void SetInternalOriginator(int ideaId, int? userId);
+
+        [OperationContract]
+        void SetInternalOriginator2(int ideaId, int? userId);
+
+        [OperationContract]
+        void SetExternalOriginator(int ideaId, int? externalPersonId);
+
+        [OperationContract]
+        void SetOriginatingDate(int ideaId, DateTime originatingDate);
+
     }
 }

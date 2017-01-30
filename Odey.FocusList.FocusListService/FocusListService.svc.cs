@@ -292,5 +292,92 @@ namespace Odey.FocusList.FocusListService
                 }                
             }
         }
+
+        #region Analyst Ideas
+
+        public IEnumerable<OF.AnalystIdea> GetAllIdeas()
+        {
+            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
+            {
+                return context.AnalystIdeas.ToList();
+            }
+        }
+
+        public int CreateIdea(OF.AnalystIdea idea)
+        {
+            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
+            {
+                context.AnalystIdeas.Add(idea);
+                context.SaveChanges();
+                return idea.AnalystIdeaId;
+            }
+        }
+
+        public void DeleteIdea(int id)
+        {
+            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
+            {
+                var idea = context.AnalystIdeas.First(i => i.AnalystIdeaId == id);
+                context.AnalystIdeas.Remove(idea);
+                context.SaveChanges();
+            }
+        }
+
+        public void SetAnalyst(int ideaId, int? userId)
+        {
+            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
+            {
+                var idea = context.AnalystIdeas.First(i => i.AnalystIdeaId == ideaId);
+                idea.AnalystId = userId;
+                context.SaveChanges();
+            }
+        }
+
+        public void SetInternalOriginator(int ideaId, int? userId)
+        {
+            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
+            {
+                var idea = context.AnalystIdeas.First(i => i.AnalystIdeaId == ideaId);
+                idea.InternalOriginatorId = userId;
+                context.SaveChanges();
+            }
+        }
+
+        public void SetInternalOriginator2(int ideaId, int? userId)
+        {
+            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
+            {
+                var idea = context.AnalystIdeas.First(i => i.AnalystIdeaId == ideaId);
+                idea.InternalOriginatorId2 = userId;
+                context.SaveChanges();
+            }
+        }
+
+        public void SetExternalOriginator(int ideaId, int? externalPersonId)
+        {
+            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
+            {
+                var idea = context.AnalystIdeas.First(i => i.AnalystIdeaId == ideaId);
+                idea.ExternalOriginatorId = externalPersonId;
+                context.SaveChanges();
+            }
+        }
+
+        public void SetOriginatingDate(int ideaId, DateTime originatingDate)
+        {
+            if (originatingDate == DateTime.MinValue)
+            {
+                throw new ArgumentException("AnalystIdea.OriginatingDate cannot be empty");
+            }
+
+            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
+            {
+                var idea = context.AnalystIdeas.First(i => i.AnalystIdeaId == ideaId);
+                idea.OriginatingDate = originatingDate;
+                context.SaveChanges();
+            }
+        }
+
+        #endregion Analyst Ideas
     }
 }
