@@ -1,13 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 using OF = Odey.Framework.Keeley.Entities;
 
 namespace Odey.FocusList.Contracts
 {
+    public class AnalystIdeaDTO
+    {
+        public int AnalystIdeaId { get; set; }
+
+        public string Analyst { get; set; }
+
+        public int? AnalystId { get; set; }
+
+        public string Issuer { get; set; }
+
+        public int IssuerId { get; set; }
+
+        public string InternalOriginator { get; set; }
+
+        public int? InternalOriginatorId { get; set; }
+
+        public string InternalOriginator2 { get; set; }
+
+        public int? InternalOriginatorId2 { get; set; }
+
+        public string ExternalOriginator { get; set; }
+
+        public int? ExternalOriginatorId { get; set; }
+
+        public DateTime? OriginatingDate { get; set; }
+
+        public bool? IsOriginatedLong { get; set; }
+
+        public DateTime? ResearchNoteLastReceived { get; set; }
+    }
+
     [ServiceContract(Namespace = "Odey.FocusList.Contracts")]
     public interface IFocusList
     {
@@ -33,10 +61,10 @@ namespace Odey.FocusList.Contracts
         void ProcessAnalystIdea(int[] issuerId, int analystId, DateTime date);
 
         [OperationContract]
-        IEnumerable<OF.AnalystIdea> GetAllIdeas();
+        IEnumerable<AnalystIdeaDTO> GetAllIdeas();
 
         [OperationContract]
-        int CreateIdea(OF.AnalystIdea idea);
+        int CreateIdea(AnalystIdeaDTO idea);
 
         [OperationContract]
         void DeleteIdea(int id);

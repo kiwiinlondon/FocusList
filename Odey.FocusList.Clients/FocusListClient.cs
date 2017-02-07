@@ -2,19 +2,14 @@
 using Odey.Framework.Infrastructure.Clients;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
-using OF=Odey.Framework.Keeley.Entities;
+using OF = Odey.Framework.Keeley.Entities;
 
 namespace Odey.FocusList.Clients
 {
     public class FocusListClient : OdeyClientBase<IFocusList>, IFocusList
     {
 
-
-  
         public void Save(OF.FocusList focusList)
         {
             IFocusList proxy = factory.CreateChannel();
@@ -124,7 +119,7 @@ namespace Odey.FocusList.Clients
             }
         }
 
-        public IEnumerable<OF.AnalystIdea> GetAllIdeas()
+        public IEnumerable<AnalystIdeaDTO> GetAllIdeas()
         {
             IFocusList proxy = factory.CreateChannel();
             try
@@ -139,7 +134,7 @@ namespace Odey.FocusList.Clients
             }
         }
 
-        public int CreateIdea(OF.AnalystIdea idea)
+        public int CreateIdea(AnalystIdeaDTO idea)
         {
             IFocusList proxy = factory.CreateChannel();
             try

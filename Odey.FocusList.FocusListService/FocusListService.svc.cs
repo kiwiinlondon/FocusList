@@ -295,21 +295,54 @@ namespace Odey.FocusList.FocusListService
 
         #region Analyst Ideas
 
-        public IEnumerable<OF.AnalystIdea> GetAllIdeas()
+        public IEnumerable<AnalystIdeaDTO> GetAllIdeas()
         {
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
-                return context.AnalystIdeas.ToList();
+                return context.AnalystIdeas
+                    .Include(i => i.Issuer.LegalEntity)
+                    .Include(i => i.Analyst)
+                    .Include(i => i.InternalOriginator)
+                    .Include(i => i.InternalOriginator2)
+                    .Include(i => i.ExternalOriginator)
+                    .Select(i => new AnalystIdeaDTO
+                    {
+                        AnalystIdeaId = i.AnalystIdeaId,
+                        OriginatingDate = i.OriginatingDate,
+                        ResearchNoteLastReceived = i.ResearchNoteLastReceived,
+                        Issuer = i.Issuer.LegalEntity.Name,
+                        IssuerId = i.IssuerId,
+                        Analyst = (i.Analyst != null ? i.Analyst.Name : null),
+                        AnalystId = i.AnalystId,
+                        InternalOriginator = (i.InternalOriginator != null ? i.InternalOriginator.Name : null),
+                        InternalOriginatorId = i.InternalOriginatorId,
+                        InternalOriginator2 = (i.InternalOriginator2 != null ? i.InternalOriginator2.Name : null),
+                        InternalOriginatorId2 = i.InternalOriginatorId2,
+                        ExternalOriginator = (i.ExternalOriginator != null ? i.ExternalOriginator.Name : null),
+                        ExternalOriginatorId = i.ExternalOriginatorId,
+                        IsOriginatedLong = i.IsOriginatedLong,
+                    })
+                    .ToList();
             }
         }
 
-        public int CreateIdea(OF.AnalystIdea idea)
+        public int CreateIdea(AnalystIdeaDTO dto)
         {
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
-                context.AnalystIdeas.Add(idea);
+                var newIdea = new OF.AnalystIdea
+                {
+                    IssuerId = dto.IssuerId,
+                    AnalystId = dto.AnalystId,
+                    InternalOriginatorId = dto.InternalOriginatorId,
+                    InternalOriginatorId2 = dto.InternalOriginatorId2,
+                    ExternalOriginatorId = dto.ExternalOriginatorId,
+                    OriginatingDate = dto.OriginatingDate,
+                    IsOriginatedLong = dto.IsOriginatedLong,
+                };
+                context.AnalystIdeas.Add(newIdea);
                 context.SaveChanges();
-                return idea.AnalystIdeaId;
+                return newIdea.AnalystIdeaId;
             }
         }
 
