@@ -396,13 +396,8 @@ namespace Odey.FocusList.FocusListService
             }
         }
 
-        public void SetOriginatingDate(int ideaId, DateTime originatingDate)
+        public void SetOriginatingDate(int ideaId, DateTime? originatingDate)
         {
-            if (originatingDate == DateTime.MinValue)
-            {
-                throw new ArgumentException("AnalystIdea.OriginatingDate cannot be empty");
-            }
-
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
                 var idea = context.AnalystIdeas.First(i => i.AnalystIdeaId == ideaId);

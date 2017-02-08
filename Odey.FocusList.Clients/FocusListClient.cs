@@ -224,7 +224,7 @@ namespace Odey.FocusList.Clients
             }
         }
 
-        public void SetOriginatingDate(int ideaId, DateTime originatingDate)
+        public void SetOriginatingDate(int ideaId, DateTime? originatingDate)
         {
             IFocusList proxy = factory.CreateChannel();
             try

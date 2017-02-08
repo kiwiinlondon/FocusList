@@ -82,7 +82,7 @@ namespace Odey.FocusList.Contracts
         void SetExternalOriginator(int ideaId, int? externalPersonId);
 
         [OperationContract]
-        void SetOriginatingDate(int ideaId, DateTime originatingDate);
+        void SetOriginatingDate(int ideaId, DateTime? originatingDate);
 
     }
 }
