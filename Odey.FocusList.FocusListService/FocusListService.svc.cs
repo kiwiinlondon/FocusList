@@ -406,6 +406,16 @@ namespace Odey.FocusList.FocusListService
             }
         }
 
+        public void SetIsOriginatedLong(int ideaId, bool? isLong)
+        {
+            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
+            {
+                var idea = context.AnalystIdeas.First(i => i.AnalystIdeaId == ideaId);
+                idea.IsOriginatedLong = isLong;
+                context.SaveChanges();
+            }
+        }
+
         #endregion Analyst Ideas
     }
 }

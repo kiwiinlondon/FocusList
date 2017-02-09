@@ -84,5 +84,8 @@ namespace Odey.FocusList.Contracts
         [OperationContract]
         void SetOriginatingDate(int ideaId, DateTime? originatingDate);
 
+        [OperationContract]
+        void SetIsOriginatedLong(int ideaId, bool? isLong);
+
     }
 }

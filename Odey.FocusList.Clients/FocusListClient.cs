@@ -238,5 +238,20 @@ namespace Odey.FocusList.Clients
                 throw;
             }
         }
+
+        public void SetIsOriginatedLong(int ideaId, bool? isLong)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.SetIsOriginatedLong(ideaId, isLong);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
     }
 }
