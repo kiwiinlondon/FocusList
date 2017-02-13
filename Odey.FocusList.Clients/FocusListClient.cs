@@ -119,7 +119,7 @@ namespace Odey.FocusList.Clients
             }
         }
 
-        public IEnumerable<AnalystIdeaDTO> GetAllIdeas()
+        public List<AnalystIdeaDTO> GetAllIdeas()
         {
             IFocusList proxy = factory.CreateChannel();
             try

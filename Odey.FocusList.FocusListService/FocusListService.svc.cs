@@ -5,7 +5,6 @@ using System.Data.Entity;
 using System.Collections.Generic;
 using System.Reflection;
 using log4net;
-using log4net.Repository.Hierarchy;
 using Odey.FocusList.Contracts;
 using Odey.Framework.Infrastructure.Services;
 using Odey.Framework.Keeley.Entities.Enums;
@@ -19,7 +18,7 @@ namespace Odey.FocusList.FocusListService
     public class FocusListService : OdeyServiceBase, IFocusList
     {
 
-        private static readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly new ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public void Save(OF.FocusList focusList)
         {
@@ -295,7 +294,7 @@ namespace Odey.FocusList.FocusListService
 
         #region Analyst Ideas
 
-        public IEnumerable<AnalystIdeaDTO> GetAllIdeas()
+        public List<AnalystIdeaDTO> GetAllIdeas()
         {
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {

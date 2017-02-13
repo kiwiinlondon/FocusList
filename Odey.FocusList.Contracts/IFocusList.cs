@@ -61,7 +61,7 @@ namespace Odey.FocusList.Contracts
         void ProcessAnalystIdea(int[] issuerId, int analystId, DateTime date);
 
         [OperationContract]
-        IEnumerable<AnalystIdeaDTO> GetAllIdeas();
+        List<AnalystIdeaDTO> GetAllIdeas();
 
         [OperationContract]
         int CreateIdea(AnalystIdeaDTO idea);
