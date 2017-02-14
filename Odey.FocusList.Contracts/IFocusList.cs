@@ -17,6 +17,8 @@ namespace Odey.FocusList.Contracts
 
         public int IssuerId { get; set; }
 
+        public IEnumerable<string> BloombergTickers { get; set; }
+
         public string InternalOriginator { get; set; }
 
         public int? InternalOriginatorId { get; set; }

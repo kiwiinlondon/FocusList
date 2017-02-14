@@ -298,8 +298,9 @@ namespace Odey.FocusList.FocusListService
         {
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
-                return context.AnalystIdeas
+                var ideas = context.AnalystIdeas
                     .Include(i => i.Issuer.LegalEntity)
+                    .Include("Issuer.Instruments.InstrumentMarkets")
                     .Include(i => i.Analyst)
                     .Include(i => i.InternalOriginator)
                     .Include(i => i.InternalOriginator2)
@@ -310,6 +311,7 @@ namespace Odey.FocusList.FocusListService
                         OriginatingDate = i.OriginatingDate,
                         ResearchNoteLastReceived = i.ResearchNoteLastReceived,
                         Issuer = i.Issuer.LegalEntity.Name,
+                        BloombergTickers =  i.Issuer.Instruments.SelectMany(x => x.InstrumentMarkets.Select(im => im.BloombergTicker)),
                         IssuerId = i.IssuerId,
                         Analyst = (i.Analyst != null ? i.Analyst.Name : null),
                         AnalystId = i.AnalystId,
@@ -322,6 +324,13 @@ namespace Odey.FocusList.FocusListService
                         IsOriginatedLong = i.IsOriginatedLong,
                     })
                     .ToList();
+
+                // Call .ToList() on nested list of entitites
+                foreach (var idea in ideas) {
+                    idea.BloombergTickers = idea.BloombergTickers.Where(t => t != null).Distinct().ToList();
+                }
+
+                return ideas;
             }
         }
 
