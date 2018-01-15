@@ -86,8 +86,8 @@ WHERE
 -- restore dates in GetSinceYearEnd and GetShortSinceYearEnd in Odey.Reporting.Web.Internal.FocusList
 ---------------
 
-
-
+-- update adjustment factor
+update focuslist set adjustmentfactoritd = adjustmentfactorytd,adjustmentfactorytd = null where adjustmentfactorytd is not null
 
 --check
 SELECT dim.InstrumentName, dim.InstrumentMarketId, fl.CurrentPriceDate, fl.CurrentPrice, 
