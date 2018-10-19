@@ -19,11 +19,11 @@ namespace Odey.FocusList.Testing
             flClient.Add(433, DateTime.Parse("11-dec-2017"), 87.58m, 77, true, true);
         }
 
-        public static void ImportLegacy()
-        {
-            List<OF.FocusList> focusList = LegacyImporter.GetLegacyTransformed();
-            FocusListClient client = new FocusListClient();
-            client.SaveList(focusList);
-        }
+        //public static void ImportLegacy()
+        //{
+        //    List<OF.FocusList> focusList = LegacyImporter.GetLegacyTransformed();
+        //    FocusListClient client = new FocusListClient();
+        //    client.SaveList(focusList);
+        //}
     }
 }
