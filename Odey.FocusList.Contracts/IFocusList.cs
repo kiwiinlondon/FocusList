@@ -48,6 +48,9 @@ namespace Odey.FocusList.Contracts
         void SaveList(List<OF.FocusList> focusList);
 
         [OperationContract]
+        List<OF.FocusList> GetAll();
+
+        [OperationContract]
         void UpdatePrice(OF.Price price);
 
         [OperationContract]

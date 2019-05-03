@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Data.Entity;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Reflection;
 using log4net;
 using Odey.FocusList.Contracts;
@@ -65,6 +66,13 @@ namespace Odey.FocusList.FocusListService
             }
         }
 
+        public List<OF.FocusList> GetAll()
+        {
+            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
+            {
+                return context.FocusLists.ToList();
+            }
+        }
 
         public void UpdatePrice(OF.Price price)
         {
