@@ -54,7 +54,10 @@ namespace Odey.FocusList.Contracts
         void Reprice(DateTime repriceDate);
 
         [OperationContract]
-        void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong, bool skipCodeRed = false);
+        void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong);
+
+        [OperationContract]
+        void AddIdea(AnalystIdea dto);
 
         [OperationContract]
         void Remove(int instrumentMarketId, int analystId, decimal outPrice, DateTime outDate);

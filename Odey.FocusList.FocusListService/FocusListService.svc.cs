@@ -11,7 +11,7 @@ using Odey.Framework.Keeley.Entities.Enums;
 using Odey.MarketData.Clients;
 using ServiceModelEx;
 using OF = Odey.Framework.Keeley.Entities;
-using Odey.CodeRed.Clients;
+
 
 namespace Odey.FocusList.FocusListService
 {
@@ -119,9 +119,9 @@ namespace Odey.FocusList.FocusListService
         }
 
 
-        public void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong, bool skipCodeRed = false)
+        public void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong)
         {
-            Logger.Info($"Adding to Focus List: instrumentMarketId {instrumentMarketId}, inDate {inDate}, inPrice {inPrice}, analystId {analystId}, isLong {isLong}, skipCodeRed {skipCodeRed}");
+            Logger.Info($"Adding to Focus List: instrumentMarketId {instrumentMarketId}, inDate {inDate}, inPrice {inPrice}, analystId {analystId}, isLong {isLong}");
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
                 OF.FocusList existing = context.FocusLists.Where(a => a.InstrumentMarketId == instrumentMarketId && !a.OutDate.HasValue).FirstOrDefault();
@@ -154,15 +154,6 @@ namespace Odey.FocusList.FocusListService
                 CheckPrice(focusList.InPrice, focusList, context, "In");
                 focusList.RelativeInPrice = focusList.RelativeCurrentPrice;
                 focusList.RelativeEndOfYearPrice = focusList.RelativeInPrice;
-                if (!skipCodeRed)
-                {
-                    Logger.Info($"Adding to code red for instrumentMarketId {instrumentMarketId}");
-                    AddToCodeRed(instrumentMarket, isLong);
-                }
-                else
-                {
-                    Logger.Info($"Skipping code red call for instrumentMarketId {instrumentMarketId}");
-                }
                 context.SaveChanges();
                 Logger.Info($"Add to Focus List instrumentMarketId {instrumentMarketId} now done");
             }
@@ -206,7 +197,6 @@ namespace Odey.FocusList.FocusListService
                 existing.OutDate = outDate;
                 CheckPrice(existing.OutPrice.Value, existing, context, "Out");
                 existing.RelativeOutPrice = existing.RelativeCurrentPrice;
-                RemoveFromCodeRed(instrumentMarket);
                 context.SaveChanges();
             }
         }
@@ -257,40 +247,6 @@ namespace Odey.FocusList.FocusListService
 
         }
 
-        private void AddToCodeRed(OF.InstrumentMarket instrumentMarket,bool isLong)
-        {
-            CodeRedClient client = new CodeRedClient();
-            client.AddToFocusList(instrumentMarket.BloombergTicker, isLong);
-        }
-
-        private void RemoveFromCodeRed(OF.InstrumentMarket instrumentMarket)
-        {
-            CodeRedClient client = new CodeRedClient();
-            client.RemoveFromFocusList(instrumentMarket.BloombergTicker);
-        }
-
-        public void BringCodeRedInLine()
-        {
-            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
-            {
-                List<OF.FocusList> actualFocusList = context.FocusLists.Where(a => !a.OutDate.HasValue).ToList();
-                CodeRedClient client = new CodeRedClient();
-                List<string> codeRedFocusList = client.GetOpenFocusList();
-                foreach (OF.FocusList focusList in actualFocusList)
-                {
-                    OF.InstrumentMarket instrumentMarket = context.InstrumentMarkets.Where(a => a.InstrumentMarketID == focusList.InstrumentMarketId).FirstOrDefault();
-                    if (codeRedFocusList.Contains(instrumentMarket.BloombergTicker))
-                    {
-                        codeRedFocusList.Remove(instrumentMarket.BloombergTicker);
-                    }
-                    client.AddToFocusList(instrumentMarket.BloombergTicker, focusList.IsLong);
-                }
-                foreach (string ticker in codeRedFocusList)
-                {
-                    client.RemoveFromFocusList(ticker);
-                }                
-            }
-        }
 
         #region Analyst Ideas
 
@@ -420,6 +376,16 @@ namespace Odey.FocusList.FocusListService
             {
                 var idea = context.AnalystIdeas.First(i => i.AnalystIdeaId == ideaId);
                 idea.IsOriginatedLong = isLong;
+                context.SaveChanges();
+            }
+        }
+
+        public void AddIdea(AnalystIdea dto)
+        {
+            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
+            {
+                AnalystIdeaManager analystIdeaManager = new AnalystIdeaManager(context);
+                analystIdeaManager.Add(dto);
                 context.SaveChanges();
             }
         }

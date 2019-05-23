@@ -74,12 +74,12 @@ namespace Odey.FocusList.Clients
         }
 
 
-        public void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong, bool skipCodeRed = false)
+        public void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong)
         {
             IFocusList proxy = factory.CreateChannel();
             try
             {
-                proxy.Add(instrumentMarketId, inDate, inPrice, analystId, isLong, skipCodeRed);
+                proxy.Add(instrumentMarketId, inDate, inPrice, analystId, isLong);
                 ((ICommunicationObject)proxy).Close();
             }
             catch
@@ -245,6 +245,21 @@ namespace Odey.FocusList.Clients
             try
             {
                 proxy.SetIsOriginatedLong(ideaId, isLong);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        }
+
+        public void AddIdea(AnalystIdea dto)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.AddIdea(dto);
                 ((ICommunicationObject)proxy).Close();
             }
             catch

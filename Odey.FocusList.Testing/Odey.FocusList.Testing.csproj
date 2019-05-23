@@ -35,6 +35,9 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseDebug|AnyCPU'">
     <OutputPath>bin\ReleaseDebug\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'UAT|AnyCPU'">
     <OutputPath>bin\UAT\</OutputPath>
