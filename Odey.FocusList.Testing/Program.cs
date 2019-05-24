@@ -20,7 +20,7 @@ namespace Odey.FocusList.Testing
             {
                 IssuerId = 6290,
                 Analysts = new List<AnalystDTO>() { },
-                FocusLists = new List<FocusListDTO> { },
+                FocusLists = new List<FocusListDTO> { new FocusListDTO() { EffectiveFromDate = new DateTime(2018, 1, 1), EffectiveToDate = new DateTime(9999, 12, 31),  AnalystId = 5, IsLong = true, InPrice = 99, InstrumentMarketId = 19183 } },
                 Originators = new List<OriginatorDTO> { new OriginatorDTO() { EffectiveFromDate = new DateTime(1900, 1, 1), EffectiveToDate = new DateTime(9999, 12, 31), InternalOriginatorId = 1, IsLong = true } }
             };
 
