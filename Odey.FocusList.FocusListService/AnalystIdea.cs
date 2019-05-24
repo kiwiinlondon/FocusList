@@ -23,8 +23,6 @@ namespace Odey.FocusList.FocusListService
 
         public void Add(AnalystIdea dto)
         {
-
-
             if (dto.FocusLists == null)
             {
                 dto.FocusLists = _context.FocusLists.Where(a => a.IssuerId == dto.IssuerId).Select(a => new FocusListDTO()
@@ -117,7 +115,7 @@ namespace Odey.FocusList.FocusListService
 
             List<E.AnalystIdea2> analystIdeas = new List<E.AnalystIdea2>();
             DateTime? previous = null;
-            foreach (DateTime datePoint in datePoints)
+            foreach (DateTime datePoint in datePoints.OrderBy(a=>a))
             {
                 if (previous != null)
                 {
@@ -191,7 +189,7 @@ namespace Odey.FocusList.FocusListService
 
         private IAnalystIdea GetOverlapping(E.AnalystIdea2 analystIdea, IEnumerable<IAnalystIdea> inputs,bool isLong)
         {
-            var overlapping = inputs.Where(a => a.EffectiveFromDate <= analystIdea.EffectiveFromDate && a.EffectiveToDate <= analystIdea.EffectiveToDate && a.IsLong == isLong).ToList();
+            var overlapping = inputs.Where(a => a.EffectiveFromDate <= analystIdea.EffectiveFromDate && analystIdea.EffectiveToDate <= a.EffectiveToDate  && a.IsLong == isLong).ToList();
             if (overlapping.Count==0)
             {
                 return null;
