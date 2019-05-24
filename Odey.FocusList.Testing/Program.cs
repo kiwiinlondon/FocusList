@@ -16,7 +16,6 @@ namespace Odey.FocusList.Testing
     {
         static void Main(string[] args)
         {
-
             AnalystIdea dto = new AnalystIdea()
             {
                 IssuerId = 6290,
@@ -29,9 +28,9 @@ namespace Odey.FocusList.Testing
             focusListService.AddIdea(dto);
 
 
-                        var flClient = new FocusListClient();
+            var flClient = new FocusListClient();
             //var flClient = new FocusListService.FocusListService();
-       //     flClient.Add(433, DateTime.Parse("11-dec-2017"), 87.58m, 77, true, true);
+            //flClient.Add(433, DateTime.Parse("11-dec-2017"), 87.58m, 77, true, true);
         }
 
         //public static void ImportLegacy()
