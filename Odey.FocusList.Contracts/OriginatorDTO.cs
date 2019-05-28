@@ -13,7 +13,7 @@ namespace Odey.FocusList.Contracts
         [DataMember]
         public DateTime EffectiveFromDate { get; set; }
         [DataMember]
-        public DateTime EffectiveToDate { get; set; }
+        public DateTime? EffectiveToDate { get; set; }
         [DataMember]
         public bool IsLong { get; set; }
         [DataMember]

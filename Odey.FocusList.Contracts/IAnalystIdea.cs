@@ -10,7 +10,7 @@ namespace Odey.FocusList.Contracts
     {
         DateTime EffectiveFromDate { get; set; }
 
-        DateTime EffectiveToDate { get; set; }
+        DateTime? EffectiveToDate { get; set; }
 
         bool IsLong { get; set; }
     }

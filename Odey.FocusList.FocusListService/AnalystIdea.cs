@@ -101,16 +101,19 @@ namespace Odey.FocusList.FocusListService
         {
             dtos = dtos.Where(a => a.IsLong == isLong).ToList();
             List<DateTime> datePoints = new List<DateTime>();
-
-            foreach (var newDTO in dtos.OrderBy(a => a.EffectiveFromDate).ThenBy(a => a.EffectiveToDate))
+            bool createEOT = false;
+            foreach (var newDTO in dtos.OrderBy(a => a.EffectiveFromDate).ThenBy(a => a.EffectiveToDate ?? EOT))
             {
                 AddDatePoint(datePoints, newDTO.EffectiveFromDate);
-                DateTime effectiveToDate = newDTO.EffectiveToDate;
-                if (effectiveToDate < EOT)
+
+                if (newDTO.EffectiveToDate.HasValue)
                 {
-                    effectiveToDate = effectiveToDate.AddDays(1);
+                    AddDatePoint(datePoints, newDTO.EffectiveToDate.Value);
                 }
-                AddDatePoint(datePoints, effectiveToDate);
+                else
+                {
+                    createEOT = true;
+                }
             }
 
             List<E.AnalystIdea2> analystIdeas = new List<E.AnalystIdea2>();
@@ -119,16 +122,14 @@ namespace Odey.FocusList.FocusListService
             {
                 if (previous != null)
                 {
-                    DateTime effectiveToDate = datePoint;
-                    if (effectiveToDate != EOT)
-                    {
-                        effectiveToDate = datePoint.AddDays(-1);
-                    }
-                    analystIdeas.Add(new E.AnalystIdea2() { EffectiveFromDate = previous.Value, EffectiveToDate = effectiveToDate, IsLong = isLong });
+                    analystIdeas.Add(new E.AnalystIdea2() { EffectiveFromDate = previous.Value, EffectiveToDate = datePoint.AddDays(-1), IsLong = isLong });
                 }
                 previous = datePoint;
             }
-
+            if (createEOT)
+            {
+                analystIdeas.Add(new E.AnalystIdea2() { EffectiveFromDate = previous.Value, EffectiveToDate = null, IsLong = isLong });
+            }
             foreach (var analystIdea in analystIdeas)
             {
                 analystIdea.Originator = GetOriginator(analystIdea, dto);
@@ -138,16 +139,35 @@ namespace Odey.FocusList.FocusListService
             return analystIdeas;
         }
 
+        private Dictionary<Tuple<int?,int?,int?>, E.Originator> _originators = null;
+        private Dictionary<Tuple<int?, int?, int?>, E.Originator> Originators
+        {
+            get
+            {
+                if (_originators == null)
+                {
+                    _originators = _context.Originators.ToList().ToDictionary(a=>GetOriginatorKey(a.InternalOriginatorId, a.ExternalOriginatorId, a.InternalOriginatorId2),a=>a);
+                }
+                return _originators;
+            }
+        }
+        private Tuple<int?, int?, int?> GetOriginatorKey(int? internalOriginatorId, int? externalOriginatorId, int? internalOriginatorId2)
+        {
+            return new Tuple<int?, int?, int?>(internalOriginatorId, externalOriginatorId, internalOriginatorId2);
+        }
+
         private E.Originator GetOriginator(E.AnalystIdea2 analystIdea, AnalystIdea dto)
         {
             OriginatorDTO originatorDTO = (OriginatorDTO)GetOverlapping(analystIdea, dto.Originators, analystIdea.IsLong);
 
             if (originatorDTO != null)
             {
-                var originator = _context.Originators.FirstOrDefault(a => a.InternalOriginatorId == originatorDTO.InternalOriginatorId && a.ExternalOriginatorId == originatorDTO.ExternalOriginatorId && a.InternalOriginatorId2 == originatorDTO.InternalOriginatorId2  );
-                if (originator == null)
+                E.Originator originator;
+                var key = GetOriginatorKey(originatorDTO.InternalOriginatorId, originatorDTO.ExternalOriginatorId, originatorDTO.InternalOriginatorId2);
+                if (!Originators.TryGetValue(key, out originator))
                 {
                     originator = new E.Originator() { ExternalOriginatorId = originatorDTO.ExternalOriginatorId, InternalOriginatorId = originatorDTO.InternalOriginatorId, InternalOriginatorId2 = originatorDTO.InternalOriginatorId2 };
+                    Originators.Add(key, originator);
                     _context.Originators.Add(originator);
                 }
                 return originator;
@@ -189,7 +209,7 @@ namespace Odey.FocusList.FocusListService
 
         private IAnalystIdea GetOverlapping(E.AnalystIdea2 analystIdea, IEnumerable<IAnalystIdea> inputs,bool isLong)
         {
-            var overlapping = inputs.Where(a => a.EffectiveFromDate <= analystIdea.EffectiveFromDate && analystIdea.EffectiveToDate <= a.EffectiveToDate  && a.IsLong == isLong).ToList();
+            var overlapping = inputs.Where(a => a.EffectiveFromDate <= analystIdea.EffectiveFromDate && (analystIdea.EffectiveToDate ?? EOT) <= (a.EffectiveToDate ?? EOT) && a.IsLong == isLong).ToList();
             if (overlapping.Count==0)
             {
                 return null;
