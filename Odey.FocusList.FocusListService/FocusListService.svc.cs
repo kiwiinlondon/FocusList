@@ -133,7 +133,7 @@ namespace Odey.FocusList.FocusListService
             Logger.Info($"Adding to Focus List: instrumentMarketId {instrumentMarketId}, inDate {inDate}, inPrice {inPrice}, analystId {analystId}, isLong {isLong}");
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
-                context._applicationUserIdOverride = KeeleyServiceUserId;
+                context._applicationUserIdOverride = analystId;
 
                 OF.FocusList existing = context.FocusLists.Where(a => a.InstrumentMarketId == instrumentMarketId && !a.OutDate.HasValue).FirstOrDefault();
                 OF.InstrumentMarket instrumentMarket = context.InstrumentMarkets.Include(a=>a.Instrument).Where(a => a.InstrumentMarketID == instrumentMarketId).FirstOrDefault();
@@ -196,7 +196,7 @@ namespace Odey.FocusList.FocusListService
         {
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
-                context._applicationUserIdOverride = KeeleyServiceUserId;
+                context._applicationUserIdOverride = analystId;
 
                 OF.FocusList existing = context.FocusLists.Where(a => a.InstrumentMarketId == instrumentMarketId && !a.OutDate.HasValue && a.AnalystId == analystId).FirstOrDefault();
 
