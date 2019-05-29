@@ -19,12 +19,15 @@ namespace Odey.FocusList.Testing
             AnalystIdea dto = new AnalystIdea()
             {
                 IssuerId = 6290,
-                Analysts = new List<AnalystDTO>() { },
+                Analysts = new List<AnalystDTO>() { new AnalystDTO { AnalystId = 1, EffectiveFromDate = new DateTime(1976,5,20), IsLong = false },
+                                                    new AnalystDTO { AnalystId = 211, EffectiveFromDate = new DateTime(1976,5,20), IsLong = true } },
                 FocusLists = new List<FocusListDTO> { new FocusListDTO() { EffectiveFromDate = new DateTime(2014, 2, 27), EffectiveToDate = null,  AnalystId = 81, IsLong = true, InPrice = 5, InstrumentMarketId = 19183 } },
-                Originators = new List<OriginatorDTO> { new OriginatorDTO() { EffectiveFromDate = new DateTime(1900, 1, 1), EffectiveToDate = null, InternalOriginatorId = 1, IsLong = true } }
+                Originators = new List<OriginatorDTO> { new OriginatorDTO() { EffectiveFromDate = new DateTime(1900, 1, 1), EffectiveToDate = new DateTime(2018, 12, 31), InternalOriginatorId = 1, IsLong = true },
+                                                        new OriginatorDTO() { EffectiveFromDate = new DateTime(1900, 1, 1), EffectiveToDate = new DateTime(2018, 12, 31), InternalOriginatorId = 1, IsLong = false } }
             };
 
-            FocusListService.FocusListService focusListService = new FocusListService.FocusListService();
+            FocusListClient focusListService = new FocusListClient();
+            //FocusListService.FocusListService focusListService = new FocusListService.FocusListService();
             focusListService.AddIdea(dto);
 
 

@@ -17,10 +17,10 @@ namespace Odey.FocusList.Contracts
         [DataMember]
         public bool IsLong { get; set; }
         [DataMember]
-        public int ExternalOriginatorId { get; set; }
+        public int? ExternalOriginatorId { get; set; }
         [DataMember]
-        public int InternalOriginatorId { get; set; }
+        public int? InternalOriginatorId { get; set; }
         [DataMember]
-        public int InternalOriginatorId2 { get; set; }
+        public int? InternalOriginatorId2 { get; set; }
     }
 }

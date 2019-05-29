@@ -122,19 +122,19 @@ namespace Odey.FocusList.FocusListService
             {
                 if (previous != null)
                 {
-                    analystIdeas.Add(new E.AnalystIdea2() { EffectiveFromDate = previous.Value, EffectiveToDate = datePoint.AddDays(-1), IsLong = isLong });
+                    analystIdeas.Add(new E.AnalystIdea2() { IssuerId = dto.IssuerId,  EffectiveFromDate = previous.Value, EffectiveToDate = datePoint.AddDays(-1), IsLong = isLong });
                 }
                 previous = datePoint;
             }
             if (createEOT)
             {
-                analystIdeas.Add(new E.AnalystIdea2() { EffectiveFromDate = previous.Value, EffectiveToDate = null, IsLong = isLong });
+                analystIdeas.Add(new E.AnalystIdea2() { IssuerId = dto.IssuerId, EffectiveFromDate = previous.Value, EffectiveToDate = null, IsLong = isLong });
             }
             foreach (var analystIdea in analystIdeas)
             {
-                analystIdea.Originator = GetOriginator(analystIdea, dto);
-                analystIdea.FocusList = GetFocusList(analystIdea, dto);
-                analystIdea.Analyst = GetAnalyst(analystIdea, dto);
+                SetOriginator(analystIdea, dto);                
+                SetFocusList(analystIdea, dto);
+                SetAnalyst(analystIdea, dto);
             }
             return analystIdeas;
         }
@@ -156,6 +156,15 @@ namespace Odey.FocusList.FocusListService
             return new Tuple<int?, int?, int?>(internalOriginatorId, externalOriginatorId, internalOriginatorId2);
         }
 
+        private void SetOriginator(E.AnalystIdea2 analystIdea, AnalystIdea dto)
+        {
+            analystIdea.Originator = GetOriginator(analystIdea, dto);
+            if (analystIdea.Originator!=null && analystIdea.Originator.OriginatorId != 0)
+            {
+                analystIdea.OriginatiorId = analystIdea.Originator.OriginatorId;
+            }
+        }
+
         private E.Originator GetOriginator(E.AnalystIdea2 analystIdea, AnalystIdea dto)
         {
             OriginatorDTO originatorDTO = (OriginatorDTO)GetOverlapping(analystIdea, dto.Originators, analystIdea.IsLong);
@@ -175,6 +184,15 @@ namespace Odey.FocusList.FocusListService
             return null;
         }
 
+        private void SetAnalyst(E.AnalystIdea2 analystIdea, AnalystIdea dto)
+        {
+            analystIdea.Analyst = GetAnalyst(analystIdea, dto);
+            if (analystIdea.Analyst != null && analystIdea.Analyst.UserID != 0)
+            {
+                analystIdea.AnalystId = analystIdea.Analyst.UserID;
+            }
+        }
+
         private E.ApplicationUser GetAnalyst(E.AnalystIdea2 analystIdea, AnalystIdea dto)
         {
             AnalystDTO analystDTO = (AnalystDTO)GetOverlapping(analystIdea, dto.Analysts, analystIdea.IsLong);
@@ -189,6 +207,15 @@ namespace Odey.FocusList.FocusListService
                 return analyst;
             }
             return null;
+        }
+
+        private void SetFocusList(E.AnalystIdea2 analystIdea, AnalystIdea dto)
+        {
+            analystIdea.FocusList = GetFocusList(analystIdea, dto);
+            if (analystIdea.FocusList != null && analystIdea.FocusList.FocusListId != 0)
+            {
+                analystIdea.FocusListId = analystIdea.FocusList.FocusListId;
+            }
         }
 
         private E.FocusList GetFocusList(E.AnalystIdea2 analystIdea, AnalystIdea dto)
