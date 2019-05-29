@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using log4net;
 using Odey.FocusList.Contracts;
+using Odey.Framework.Infrastructure.EmailClient;
 using Odey.Framework.Infrastructure.Services;
 using Odey.Framework.Keeley.Entities.Enums;
 using Odey.MarketData.Clients;
@@ -139,8 +140,10 @@ namespace Odey.FocusList.FocusListService
                 OF.InstrumentMarket instrumentMarket = context.InstrumentMarkets.Include(a=>a.Instrument).Where(a => a.InstrumentMarketID == instrumentMarketId).FirstOrDefault();
                 if (existing != null)
                 {
-                    if (existing.InDate== inDate && existing.InPrice == inPrice && existing.IsLong == isLong && existing.AnalystId == analystId)
+                    if (existing.IsLong == isLong && existing.AnalystId == analystId)
                     {
+                        var emailClient = new EmailClient();
+                        emailClient.Send("focuslistservice@odey.com", "Focus List Service", "programmers@odey.com", null, null, "Tried to add focus list entry but was already open. ", $"Tried to add to Focus List but was already openb. instrumentMarketId {instrumentMarketId}, inDate {inDate}, inPrice {inPrice}, analystId {analystId}, isLong {isLong}", null);
                         return;
                     }
                     else
