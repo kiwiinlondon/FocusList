@@ -143,7 +143,7 @@ namespace Odey.FocusList.FocusListService
                     if (existing.IsLong == isLong && existing.AnalystId == analystId)
                     {
                         var emailClient = new EmailClient();
-                        emailClient.Send("focuslistservice@odey.com", "Focus List Service", "programmers@odey.com", null, null, "Tried to add focus list entry but was already open. ", $"Tried to add to Focus List but was already openb. instrumentMarketId {instrumentMarketId}, inDate {inDate}, inPrice {inPrice}, analystId {analystId}, isLong {isLong}", null);
+                        emailClient.Send("focuslistservice@odey.com", "Focus List Service", "programmers@odey.com", null, null, "Tried to add focus list entry but was already open. ", $"Tried to add to Focus List but was already open. InstrumentMarketId {instrumentMarketId}, InDate {inDate}, InPrice {inPrice}, AnalystId {analystId}, IsLong {isLong}", null);
                         return;
                     }
                     else
