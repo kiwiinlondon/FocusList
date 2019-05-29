@@ -64,6 +64,9 @@
     <Reference Include="Odey.Framework.Infrastructure.Contracts">
       <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Contracts.dll</HintPath>
     </Reference>
+    <Reference Include="Odey.Framework.Infrastructure.EmailClient">
+      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.EmailClient.dll</HintPath>
+    </Reference>
     <Reference Include="Odey.Framework.Infrastructure.Services">
       <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>
     </Reference>
