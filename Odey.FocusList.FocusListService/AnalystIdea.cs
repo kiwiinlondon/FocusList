@@ -70,10 +70,10 @@ namespace Odey.FocusList.FocusListService
             {
                 var existing = matched.Key;
                 var toApply = matched.Value;
-                existing.Analyst = toApply.Analyst;
+               // existing.Analyst = toApply.Analyst;
                 existing.EffectiveToDate = toApply.EffectiveToDate;
-                existing.FocusList = toApply.FocusList;
-                existing.Originator = toApply.Originator;                
+               // existing.FocusList = toApply.FocusList;
+                //existing.Originator = toApply.Originator;                
             }
             foreach(var ideaToAdd in ideasToAdd)
             {
