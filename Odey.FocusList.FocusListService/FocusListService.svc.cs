@@ -13,7 +13,7 @@ using Odey.Framework.Keeley.Entities.Enums;
 using Odey.MarketData.Clients;
 using ServiceModelEx;
 using OF = Odey.Framework.Keeley.Entities;
-
+using Odey.Framework.Infrastructure.TaskManagement;
 
 namespace Odey.FocusList.FocusListService
 {
@@ -96,21 +96,7 @@ namespace Odey.FocusList.FocusListService
             }
         }
 
-        public void Reprice(DateTime repriceDate)
-        {
-            using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
-            {
-                List<OF.FocusList> focusLists = context.FocusLists
-                    .Where(a=>!a.OutDate.HasValue)
-                    .ToList();
-                PriceClient client = new PriceClient();
-                foreach(OF.FocusList focusList in focusLists)
-                {
-                    PriceFocusList(client, focusList, repriceDate);                        
-                }
-                context.SaveChanges();
-            }
-        }
+        
 
         private int GetRelativeIndexId(OF.KeeleyModel context,int issuerId)
         {
@@ -163,7 +149,7 @@ namespace Odey.FocusList.FocusListService
                 focusList.IssuerId = instrumentMarket.IssuerID;
                 
                 PriceClient client = new PriceClient();
-                PriceFocusList(client, focusList, DateTime.Today);
+                new Pricer().PriceFocusList(client, focusList, DateTime.Today);
                 focusList.EndOfYearPrice = inPrice;
                 CheckPrice(focusList.InPrice, focusList, context, "In");
                 focusList.RelativeInPrice = focusList.RelativeCurrentPrice;
@@ -182,18 +168,7 @@ namespace Odey.FocusList.FocusListService
             }
         }
 
-        private void PriceFocusList(PriceClient client, OF.FocusList focusList, DateTime referenceDate)
-        {
-            OF.Price price = client.Get(focusList.InstrumentMarketId, (int)EntityRankingSchemeIds.Default, referenceDate);
-            OF.Price relativePrice = client.Get(focusList.RelativeIndexInstrumentMarketId, (int)EntityRankingSchemeIds.Default, referenceDate);
-           
-            focusList.CurrentPrice = price.Value;
-            focusList.CurrentPriceId = price.PriceId;
-            focusList.CurrentPriceDate = price.ReferenceDate;
-            focusList.RelativeCurrentPrice = relativePrice.Value;
-            focusList.RelativeCurrentPriceId = relativePrice.PriceId;
-            focusList.RelativeCurrentPriceDate = relativePrice.ReferenceDate;
-        }
+        
 
         public void Remove(int instrumentMarketId, int analystId, decimal outPrice, DateTime outDate)
         {
@@ -406,6 +381,17 @@ namespace Odey.FocusList.FocusListService
                 analystIdeaManager.Add(dto);
                 context.SaveChanges();
             }
+        }
+
+        public void Reprice(DateTime repriceDate)
+        {
+            new Pricer().Reprice(repriceDate);
+        }
+
+        public void RunTasks(int[] taskIds)
+        {
+            TaskManager manager = new TaskManager(new TaskRunnerFactory(), Logger);
+            manager.RunTasks();
         }
 
         #endregion Analyst Ideas

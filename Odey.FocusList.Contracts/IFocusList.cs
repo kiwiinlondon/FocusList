@@ -95,5 +95,7 @@ namespace Odey.FocusList.Contracts
         [OperationContract]
         void SetIsOriginatedLong(int ideaId, bool? isLong);
 
+        [OperationContract]
+        void RunTasks(int[] taskIds);
     }
 }

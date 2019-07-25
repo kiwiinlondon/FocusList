@@ -284,5 +284,21 @@ namespace Odey.FocusList.Clients
                 throw;
             }
         }
+
+        public void RunTasks(int[] taskIds)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.RunTasks(taskIds);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+        
+        }
     }
 }

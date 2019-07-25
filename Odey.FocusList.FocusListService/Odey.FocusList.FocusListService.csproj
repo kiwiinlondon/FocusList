@@ -70,6 +70,9 @@
     <Reference Include="Odey.Framework.Infrastructure.Services">
       <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Services.dll</HintPath>
     </Reference>
+    <Reference Include="Odey.Framework.Infrastructure.TaskManagement">
+      <HintPath>..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.TaskManagement.dll</HintPath>
+    </Reference>
     <Reference Include="Odey.Framework.Keeley.Entities">
       <HintPath>..\..\Binaries\Odey.Framework.Keeley.Entities\Odey.Framework.Keeley.Entities.dll</HintPath>
     </Reference>
@@ -123,7 +126,10 @@
     <Compile Include="FocusListService.svc.cs">
       <DependentUpon>FocusListService.svc</DependentUpon>
     </Compile>
+    <Compile Include="Pricer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tasks\TaskRunnerFactory.cs" />
+    <Compile Include="Tasks\TaskRunnerRollFocusList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
