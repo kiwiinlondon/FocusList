@@ -1,5 +1,4 @@
-﻿using Odey.CodeRed.Clients;
-using Odey.FocusList.Clients;
+﻿using Odey.FocusList.Clients;
 using Odey.FocusList.Contracts;
 using Odey.FocusList.FocusListService;
 using Odey.StaticServices.Clients;
