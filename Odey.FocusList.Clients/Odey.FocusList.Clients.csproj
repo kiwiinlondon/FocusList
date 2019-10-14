@@ -41,6 +41,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FocusListClient|AnyCPU'">
     <OutputPath>bin\FocusListClient\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TeamCityFocusListClient|AnyCPU'">
+    <OutputPath>bin\TeamCityFocusListClient\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TeamCityFocusListService|AnyCPU'">
+    <OutputPath>bin\TeamCityFocusListService\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Odey.Framework.Infrastructure.Clients">
       <HintPath Condition="Exists('..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll')">..\..\Binaries\Odey.Framework.Infrastructure\Odey.Framework.Infrastructure.Clients.dll</HintPath>

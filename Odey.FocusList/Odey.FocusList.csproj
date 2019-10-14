@@ -41,6 +41,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FocusListClient|AnyCPU'">
     <OutputPath>bin\FocusListClient\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TeamCityFocusListClient|AnyCPU'">
+    <OutputPath>bin\TeamCityFocusListClient\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TeamCityFocusListService|AnyCPU'">
+    <OutputPath>bin\TeamCityFocusListService\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
