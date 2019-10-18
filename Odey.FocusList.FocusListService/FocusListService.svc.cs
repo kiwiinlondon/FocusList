@@ -97,12 +97,16 @@ namespace Odey.FocusList.FocusListService
 
         
 
-        private int GetRelativeIndexId(OF.KeeleyModel context,int issuerId)
+        private int GetRelativeIndexId(OF.KeeleyModel context,int issuerId, InstrumentClassIds instrumentClass)
         {
             OF.Industry subIndustry = context.IssuerIndustries.Include(a=>a.Industry).Where(a=>a.IssuerID == issuerId && a.IndustryClassificationID == (int)IndustryClassificationIds.GICS).Select(a=>a.Industry).First();
             if (subIndustry.IndustryID == (int)IndustryIds.GICSUnclassifiedSubIndustry)
             {
-                throw new ApplicationException(String.Format("Issuer {0} does not have GICS industry so cannot establish relative index", issuerId));
+                if (instrumentClass != InstrumentClassIds.GovtBond)
+                {
+                    throw new ApplicationException(String.Format(
+                        "Issuer {0} does not have GICS industry so cannot establish relative index", issuerId));
+                }
             }
             OF.Industry industry = context.Industries.Where(a => a.IndustryID == subIndustry.ParentIndustryID).First();
             OF.Industry industryGroup = context.Industries.Where(a => a.IndustryID == industry.ParentIndustryID).First();
@@ -139,7 +143,7 @@ namespace Odey.FocusList.FocusListService
                 }
                 OF.FocusList focusList = new OF.FocusList();
                 context.FocusLists.Add(focusList);
-                focusList.RelativeIndexInstrumentMarketId = GetRelativeIndexId(context, instrumentMarket.IssuerID);
+                focusList.RelativeIndexInstrumentMarketId = GetRelativeIndexId(context, instrumentMarket.IssuerID, instrumentMarket.InstrumentClassIdAsEnum);
                 focusList.AnalystId = analystId;
                 focusList.InDate = inDate;
                 focusList.InPrice = inPrice;                
