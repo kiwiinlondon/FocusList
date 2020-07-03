@@ -36,9 +36,10 @@ namespace Odey.FocusList.Testing
             var flClient = new FocusListClient();
             //var flClient = new FocusListService.FocusListService();
             //flClient.Remove(24050, 181,193.02000000m, new DateTime(2020,5,8));
-            flClient.Add(24050, new DateTime(2020, 3, 31), 76.19000000m, 181, false);
-            flClient.Remove(24050, 181, 83.96000000m, new DateTime(2020, 5, 8));
+            //flClient.Add(24050, new DateTime(2020, 3, 31), 76.19000000m, 181, false);
+            flClient.Remove(26423, 98, 1.49m, new DateTime(2020, 5, 11));
         }
+ 	 	 	 	 	 	 	 	 	 	 	 	 
 
         //public static void ImportLegacy()
         //{
