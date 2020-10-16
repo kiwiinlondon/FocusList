@@ -57,6 +57,12 @@ namespace Odey.FocusList.Contracts
         void Reprice(DateTime repriceDate);
 
         [OperationContract]
+        void ApplyAdjustedPrices();
+
+        [OperationContract]
+        void ApplyAdjustedPricesToClosedPositions(DateTime startDate, DateTime endDate);
+
+        [OperationContract]
         void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong);
 
         [OperationContract]

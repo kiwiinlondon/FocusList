@@ -146,7 +146,8 @@ namespace Odey.FocusList.FocusListService
                 focusList.RelativeIndexInstrumentMarketId = GetRelativeIndexId(context, instrumentMarket.IssuerID, instrumentMarket.InstrumentClassIdAsEnum);
                 focusList.AnalystId = analystId;
                 focusList.InDate = inDate;
-                focusList.InPrice = inPrice;                
+                focusList.InPrice = inPrice;
+                focusList.AdjustedInPrice = inPrice;
                 focusList.IsLong = isLong;
                 focusList.InstrumentMarketId = instrumentMarketId;
                 focusList.IssuerId = instrumentMarket.IssuerID;
@@ -188,6 +189,7 @@ namespace Odey.FocusList.FocusListService
                     throw new ApplicationException(String.Format("Analyst {0} has no open Focus List entry for {1} to close", analyst.Name, instrumentMarket.BloombergTicker));
                 }
                 existing.OutPrice = outPrice;
+                existing.AdjustedOutPrice = outPrice;
                 existing.OutDate = outDate;
                 CheckPrice(existing.OutPrice.Value, existing, context, "Out");
                 existing.RelativeOutPrice = existing.RelativeCurrentPrice;
@@ -390,6 +392,17 @@ namespace Odey.FocusList.FocusListService
         {
             new Pricer().Reprice(repriceDate);
         }
+
+
+        public void ApplyAdjustedPrices()
+        {
+            new Pricer().ApplyAdjustedPrices();
+        }
+        public void ApplyAdjustedPricesToClosedPositions(DateTime startDate, DateTime endDate)
+        {
+            new Pricer().ApplyAdjustedPricesToClosedPositions(startDate, endDate);
+        }
+
 
         public void RunTasks(int[] taskIds)
         {

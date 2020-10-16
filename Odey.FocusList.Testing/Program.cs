@@ -33,8 +33,15 @@ namespace Odey.FocusList.Testing
           //  focusListService.AddIdea(dto);
 
 
-            //var flClient = new FocusListClient();
-            var flClient = new FocusListService.FocusListService();
+           var flClient = new FocusListClient();
+
+           //var flClient = new FocusListService.FocusListService();
+            
+            
+          //  flClient.ApplyAdjustedPricesToClosedPositions(new DateTime(2018, 1, 1),new DateTime(2019, 1, 1));
+          //  flClient.ApplyAdjustedPricesToClosedPositions(new DateTime(2017, 1, 1), new DateTime(2018, 1, 1));
+            flClient.ApplyAdjustedPricesToClosedPositions(new DateTime(2012, 1, 1), new DateTime(2013, 1, 1));
+
             ////flClient.Remove(24050, 181,193.02000000m, new DateTime(2020,5,8));
             flClient.Add(30562, DateTime.Today, 76.19000000m, 181, true);
             flClient.Remove(26423, 98, 1.49m, new DateTime(2020, 5, 11));

@@ -303,5 +303,37 @@ namespace Odey.FocusList.Clients
             }
         
         }
+
+        public void ApplyAdjustedPrices()
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.ApplyAdjustedPrices();
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+
+        }
+
+        public void ApplyAdjustedPricesToClosedPositions(DateTime startDate, DateTime endDate)
+        {
+            IFocusList proxy = factory.CreateChannel();
+            try
+            {
+                proxy.ApplyAdjustedPricesToClosedPositions(startDate, endDate);
+                ((ICommunicationObject)proxy).Close();
+            }
+            catch
+            {
+                ((ICommunicationObject)proxy).Abort();
+                throw;
+            }
+
+        }
     }
 }
