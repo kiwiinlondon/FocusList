@@ -34,7 +34,7 @@ namespace Odey.FocusList.Testing
 
 
            var flClient = new FocusListClient();
-
+            flClient.ApplyAdjustedPrices();
            //var flClient = new FocusListService.FocusListService();
             
             
