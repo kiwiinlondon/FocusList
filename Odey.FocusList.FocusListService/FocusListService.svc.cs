@@ -158,6 +158,10 @@ namespace Odey.FocusList.FocusListService
                 CheckPrice(focusList.InPrice, focusList, context, "In");
                 focusList.RelativeInPrice = focusList.RelativeCurrentPrice;
                 focusList.RelativeEndOfYearPrice = focusList.RelativeInPrice;
+                if (focusList.InstrumentMarketId == 28193 && focusList.AdjustedInPrice < 1)
+                {
+                    throw new ApplicationException("Codemasters");
+                }
                 context.SaveChanges();
                 Logger.Info($"Add to Focus List instrumentMarketId {instrumentMarketId} now done");
             }

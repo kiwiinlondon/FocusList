@@ -83,7 +83,7 @@ namespace Odey.FocusList.FocusListService
             {
                 List<OF.FocusList> focusLists = context.FocusLists.Include(a => a.FocusListPrices).Where(a => !a.OutDate.HasValue)
                // .Where(a => a.OutDate.HasValue && a.OutDate >= new DateTime(2019, 1, 1) && a.OutDate < new DateTime(2020, 1, 1))
-                //.Where(a=>a.FocusListId == 483 ||a.FocusListId == 595 || a.FocusListId == 604)
+               // .Where(a=>a.FocusListId == 686)// || a.FocusListId == 595 || a.FocusListId == 604)
                 .ToList();
 
 
@@ -160,7 +160,7 @@ namespace Odey.FocusList.FocusListService
 
         public void ApplyAdjustedPricesToFocusList(PriceClient priceClient , OF.FocusList focusList, Dictionary<int, Dictionary<DateTime, MD.Price>> pricesByInstrumentMarket)
         {
-            if (focusList.InstrumentMarketId == 19183)
+            if (focusList.InstrumentMarketId == 28193)
             {
                 int i = 0;
             }
@@ -225,7 +225,10 @@ namespace Odey.FocusList.FocusListService
                     currentDate = currentDate.AddDays(1);
                 }
             }
-
+            if (focusList.InstrumentMarketId == 28193 && focusList.AdjustedInPrice < 1)
+            {
+                throw new ApplicationException("Codemasters");
+            }
         }
 
     }
