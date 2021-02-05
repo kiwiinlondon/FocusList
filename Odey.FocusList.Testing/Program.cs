@@ -28,12 +28,13 @@ namespace Odey.FocusList.Testing
           //                                              new OriginatorDTO() { EffectiveFromDate = new DateTime(1900, 1, 1), EffectiveToDate = new DateTime(2018, 12, 31), InternalOriginatorId = 1, IsLong = false } }
           //  };
 
-          //  FocusListClient focusListService = new FocusListClient();
-            FocusListService.FocusListService flClient = new FocusListService.FocusListService();
-          //  focusListService.AddIdea(dto);
+          ////  FocusListClient focusListService = new FocusListClient();
+           // FocusListService.FocusListService flClient = new FocusListService.FocusListService();
+            //flClient.Remove(10184,81,0, DateTime.Today);
+            //  focusListService.AddIdea(dto);
 
 
-          // var flClient = new FocusListClient();
+             var flClient = new FocusListClient();
             flClient.ApplyAdjustedPrices();
            //var flClient = new FocusListService.FocusListService();
             
@@ -43,7 +44,7 @@ namespace Odey.FocusList.Testing
             flClient.ApplyAdjustedPricesToClosedPositions(new DateTime(2012, 1, 1), new DateTime(2013, 1, 1));
 
             ////flClient.Remove(24050, 181,193.02000000m, new DateTime(2020,5,8));
-            flClient.Add(30562, DateTime.Today, 76.19000000m, 181, true);
+            
             flClient.Remove(26423, 98, 1.49m, new DateTime(2020, 5, 11));
         }
  	 	 	 	 	 	 	 	 	 	 	 	 
