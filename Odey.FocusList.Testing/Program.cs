@@ -28,13 +28,13 @@ namespace Odey.FocusList.Testing
           //                                              new OriginatorDTO() { EffectiveFromDate = new DateTime(1900, 1, 1), EffectiveToDate = new DateTime(2018, 12, 31), InternalOriginatorId = 1, IsLong = false } }
           //  };
 
-          ////  FocusListClient focusListService = new FocusListClient();
-           // FocusListService.FocusListService flClient = new FocusListService.FocusListService();
+            FocusListClient flClient = new FocusListClient();
+       //     FocusListService.FocusListService flClient = new FocusListService.FocusListService();
             //flClient.Remove(10184,81,0, DateTime.Today);
             //  focusListService.AddIdea(dto);
 
 
-             var flClient = new FocusListClient();
+            // var flClient = new FocusListClient();
             flClient.ApplyAdjustedPrices();
            //var flClient = new FocusListService.FocusListService();
             

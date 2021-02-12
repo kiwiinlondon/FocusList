@@ -117,9 +117,22 @@ namespace Odey.FocusList.FocusListService
             return industryGroup.RelativeIndexInstrumentMarketId.Value;
         }
 
+        private DateTime GetInDate(DateTime inDate)
+        {
+            switch (inDate.DayOfWeek)
+            {
+                case DayOfWeek.Saturday:
+                    return inDate.AddDays(2);
+
+                case DayOfWeek.Sunday:
+                    return inDate.AddDays(1);
+            }
+            return inDate;
+        }
 
         public void Add(int instrumentMarketId, DateTime inDate, decimal inPrice, int analystId, bool isLong)
         {
+           
             Logger.Info($"Adding to Focus List: instrumentMarketId {instrumentMarketId}, inDate {inDate}, inPrice {inPrice}, analystId {analystId}, isLong {isLong}");
             using (OF.KeeleyModel context = new OF.KeeleyModel(SecurityCallStackContext.Current))
             {
@@ -145,7 +158,7 @@ namespace Odey.FocusList.FocusListService
                 context.FocusLists.Add(focusList);
                 focusList.RelativeIndexInstrumentMarketId = GetRelativeIndexId(context, instrumentMarket.IssuerID, instrumentMarket.InstrumentClassIdAsEnum);
                 focusList.AnalystId = analystId;
-                focusList.InDate = inDate;
+                focusList.InDate = GetInDate(inDate);
                 focusList.InPrice = inPrice;
                 focusList.AdjustedInPrice = inPrice;
                 focusList.IsLong = isLong;
@@ -153,7 +166,7 @@ namespace Odey.FocusList.FocusListService
                 focusList.IssuerId = instrumentMarket.IssuerID;
                 
                 PriceClient client = new PriceClient();
-                new Pricer().PriceFocusList(client, focusList, DateTime.Today);
+                new Pricer().PriceFocusList(client, focusList, focusList.InDate);
                 focusList.EndOfYearPrice = inPrice;
                 CheckPrice(focusList.InPrice, focusList, context, "In");
                 focusList.RelativeInPrice = focusList.RelativeCurrentPrice;

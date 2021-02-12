@@ -122,9 +122,12 @@ namespace Odey.FocusList.FocusListService
 
         private decimal GetAdjustedPrice(PriceClient priceClient, int instrumentMarketId,DateTime referenceDate,MD.Price price, decimal focusListPrice, int focusListId, MD.Price relativePrice,int relativeInstrumentMarketId, bool isOut)
         {
-            if (relativePrice == null || relativePrice.ReferenceDate != referenceDate)
+            if (relativePrice == null || relativePrice.ReferenceDate != referenceDate  )
             {
-                throw new ApplicationException($"No relative price found on in date for instrument market {relativeInstrumentMarketId}. Focus List Id = {focusListId}");
+                if (!(referenceDate.DayOfWeek == DayOfWeek.Monday && relativePrice.ReferenceDate == referenceDate.AddDays(-3)))
+                { 
+                    throw new ApplicationException($"No relative price found on in date for instrument market {relativeInstrumentMarketId}. Focus List Id = {focusListId}");
+                }
             }
             if (price==null)
             {
@@ -160,7 +163,7 @@ namespace Odey.FocusList.FocusListService
 
         public void ApplyAdjustedPricesToFocusList(PriceClient priceClient , OF.FocusList focusList, Dictionary<int, Dictionary<DateTime, MD.Price>> pricesByInstrumentMarket)
         {
-            if (focusList.InstrumentMarketId == 28193)
+            if (focusList.InstrumentMarketId == 3747)
             {
                 int i = 0;
             }
@@ -196,6 +199,10 @@ namespace Odey.FocusList.FocusListService
                 if (!relativePrices.TryGetValue(currentDate, out var relativePrice))
                 {
                     relativePrice = previousRelativePrice;
+                    if (relativePrice==null && currentDate.DayOfWeek == DayOfWeek.Monday)
+                    {
+                        relativePrices.TryGetValue(currentDate.AddDays(-3), out relativePrice);
+                    }
                 }
 
 
