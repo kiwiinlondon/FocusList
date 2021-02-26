@@ -120,7 +120,7 @@ namespace Odey.FocusList.FocusListService
         }
 
 
-        private decimal GetAdjustedPrice(PriceClient priceClient, int instrumentMarketId,DateTime referenceDate,MD.Price price, decimal focusListPrice, int focusListId, MD.Price relativePrice,int relativeInstrumentMarketId, bool isOut)
+        private decimal GetAdjustedPrice(PriceClient priceClient, int instrumentMarketId,DateTime referenceDate,MD.Price price, decimal focusListPrice, int focusListId, MD.Price relativePrice,int relativeInstrumentMarketId, bool isOut, decimal inPrice)
         {
             if (relativePrice == null || relativePrice.ReferenceDate != referenceDate  )
             {
@@ -131,6 +131,10 @@ namespace Odey.FocusList.FocusListService
             }
             if (price==null)
             {
+                if (referenceDate == DateTime.Today && !isOut)
+                {
+                    return inPrice;
+                }
                  throw new ApplicationException($"Adjusted Price cant be null focuslist for instrument market {instrumentMarketId}. Focus List Id = {focusListId}");
             }
             if (isOut)
@@ -163,7 +167,7 @@ namespace Odey.FocusList.FocusListService
 
         public void ApplyAdjustedPricesToFocusList(PriceClient priceClient , OF.FocusList focusList, Dictionary<int, Dictionary<DateTime, MD.Price>> pricesByInstrumentMarket)
         {
-            if (focusList.InstrumentMarketId == 3747)
+            if (focusList.InstrumentMarketId == 26539)
             {
                 int i = 0;
             }
@@ -208,13 +212,13 @@ namespace Odey.FocusList.FocusListService
 
                 if (focusList.InDate == currentDate)
                 {                    
-                    focusList.AdjustedInPrice = GetAdjustedPrice(priceClient, focusList.InstrumentMarketId, focusList.InDate,price, focusList.InPrice, focusList.FocusListId, relativePrice,focusList.RelativeIndexInstrumentMarketId,false);
+                    focusList.AdjustedInPrice = GetAdjustedPrice(priceClient, focusList.InstrumentMarketId, focusList.InDate,price, focusList.InPrice, focusList.FocusListId, relativePrice,focusList.RelativeIndexInstrumentMarketId,false,focusList.AdjustedInPrice);
                 }
 
                 if (focusList.OutDate.HasValue && currentDate == focusList.OutDate.Value)
                 {
 
-                    focusList.AdjustedOutPrice = GetAdjustedPrice(priceClient, focusList.InstrumentMarketId, focusList.OutDate.Value, price, focusList.OutPrice.Value, focusList.FocusListId, relativePrice, focusList.RelativeIndexInstrumentMarketId,true);
+                    focusList.AdjustedOutPrice = GetAdjustedPrice(priceClient, focusList.InstrumentMarketId, focusList.OutDate.Value, price, focusList.OutPrice.Value, focusList.FocusListId, relativePrice, focusList.RelativeIndexInstrumentMarketId,true, focusList.AdjustedInPrice);
                 }
 
                 existingPrice.Price = GetPriceValue(price);
