@@ -61,8 +61,13 @@ namespace Odey.FocusList.FocusListService
         {
             var instrumentMarketIds = focusLists.Select(a => a.InstrumentMarketId).Union(focusLists.Select(a => a.RelativeIndexInstrumentMarketId)).Distinct().ToArray();
 
+
+            var minInDateByInstrumentMarketId = focusLists.GroupBy(a => a.InstrumentMarketId).ToDictionary(a => a.Key, a => a.Min(b => b.InDate));
             var adjustedPrices = priceClient.GetAdjustedPrices(instrumentMarketIds, focusLists.Min(a => a.InDate), DateTime.Today);
             Dictionary<int, Dictionary<DateTime, MD.Price>> pricesByInstrumentMarketId = new Dictionary<int, Dictionary<DateTime, MD.Price>>();
+
+        
+
             foreach (var price in adjustedPrices)
             {
                 if (!pricesByInstrumentMarketId.TryGetValue(price.InstrumentMarketId,out var pricesForInstruemntMarket))
@@ -70,7 +75,18 @@ namespace Odey.FocusList.FocusListService
                     pricesForInstruemntMarket = new Dictionary<DateTime, MD.Price>();
                     pricesByInstrumentMarketId.Add(price.InstrumentMarketId, pricesForInstruemntMarket);
                 }
-                pricesForInstruemntMarket.Add(price.ReferenceDate,price);
+                if (pricesForInstruemntMarket.ContainsKey(price.ReferenceDate))
+                {
+                    var minInDate = minInDateByInstrumentMarketId[price.InstrumentMarketId];
+                    if (minInDate<=price.ReferenceDate)
+                    {
+                        throw new ApplicationException($"Duplicate price on referencedate for instrument {price.InstrumentMarketId} on {price.ReferenceDate}");
+                    }
+                }
+                else
+                {
+                    pricesForInstruemntMarket.Add(price.ReferenceDate, price);
+                }
             }
             return pricesByInstrumentMarketId;
         }
