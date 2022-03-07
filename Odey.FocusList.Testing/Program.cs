@@ -29,7 +29,7 @@ namespace Odey.FocusList.Testing
           //  };
 
             FocusListClient flClient = new FocusListClient();
-         //   FocusListService.FocusListService flClient = new FocusListService.FocusListService();
+            //FocusListService.FocusListService flClient = new FocusListService.FocusListService();
             //flClient.Remove(10184,81,0, DateTime.Today);
             //  focusListService.AddIdea(dto);
 

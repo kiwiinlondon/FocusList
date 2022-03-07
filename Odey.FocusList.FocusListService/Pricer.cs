@@ -187,74 +187,76 @@ namespace Odey.FocusList.FocusListService
             {
                 int i = 0;
             }
-            var prices = pricesByInstrumentMarket[focusList.InstrumentMarketId];
-            var relativePrices = pricesByInstrumentMarket[focusList.RelativeIndexInstrumentMarketId];
-            var existingPrices = focusList.FocusListPrices.ToDictionary(a => a.ReferenceDate, a => a);
-            
-            DateTime currentDate = focusList.InDate;
-            DateTime outDate = DateTime.Today;
+            if (pricesByInstrumentMarket.TryGetValue(focusList.InstrumentMarketId, out var prices))
+            { 
+                var relativePrices = pricesByInstrumentMarket[focusList.RelativeIndexInstrumentMarketId];
+                var existingPrices = focusList.FocusListPrices.ToDictionary(a => a.ReferenceDate, a => a);
 
-            if (focusList.OutDate.HasValue)
-            {
-                outDate = focusList.OutDate.Value;
-            }
-            
+                DateTime currentDate = focusList.InDate;
+                DateTime outDate = DateTime.Today;
 
-            MD.Price previousPrice = null;
-            MD.Price previousRelativePrice = null;
-            while (currentDate<=outDate)
-            {                
-                if (!existingPrices.TryGetValue(currentDate,out var existingPrice))
+                if (focusList.OutDate.HasValue)
                 {
-                    existingPrice = new OF.FocusListPrices() { FocusListId = focusList.FocusListId, ReferenceDate = currentDate };
-                    focusList.FocusListPrices.Add(existingPrice);
-                }
-
-                if (!prices.TryGetValue(currentDate, out var price))
-                {
-                    price = previousPrice;
+                    outDate = focusList.OutDate.Value;
                 }
 
 
-                if (!relativePrices.TryGetValue(currentDate, out var relativePrice))
+                MD.Price previousPrice = null;
+                MD.Price previousRelativePrice = null;
+                while (currentDate <= outDate)
                 {
-                    relativePrice = previousRelativePrice;
-                    if (relativePrice==null && currentDate.DayOfWeek == DayOfWeek.Monday)
+                    if (!existingPrices.TryGetValue(currentDate, out var existingPrice))
                     {
-                        relativePrices.TryGetValue(currentDate.AddDays(-3), out relativePrice);
+                        existingPrice = new OF.FocusListPrices() { FocusListId = focusList.FocusListId, ReferenceDate = currentDate };
+                        focusList.FocusListPrices.Add(existingPrice);
+                    }
+
+                    if (!prices.TryGetValue(currentDate, out var price))
+                    {
+                        price = previousPrice;
+                    }
+
+
+                    if (!relativePrices.TryGetValue(currentDate, out var relativePrice))
+                    {
+                        relativePrice = previousRelativePrice;
+                        if (relativePrice == null && currentDate.DayOfWeek == DayOfWeek.Monday)
+                        {
+                            relativePrices.TryGetValue(currentDate.AddDays(-3), out relativePrice);
+                        }
+                    }
+
+
+                    if (focusList.InDate == currentDate)
+                    {
+                        focusList.AdjustedInPrice = GetAdjustedPrice(priceClient, focusList.InstrumentMarketId, focusList.InDate, price, focusList.InPrice, focusList.FocusListId, relativePrice, focusList.RelativeIndexInstrumentMarketId, false, focusList.AdjustedInPrice);
+                    }
+
+                    if (focusList.OutDate.HasValue && currentDate == focusList.OutDate.Value)
+                    {
+
+                        focusList.AdjustedOutPrice = GetAdjustedPrice(priceClient, focusList.InstrumentMarketId, focusList.OutDate.Value, price, focusList.OutPrice.Value, focusList.FocusListId, relativePrice, focusList.RelativeIndexInstrumentMarketId, true, focusList.AdjustedInPrice);
+                    }
+
+                    existingPrice.Price = GetPriceValue(price);
+                    existingPrice.RelativePrice = GetPriceValue(relativePrice);
+
+                    currentDate = currentDate.AddDays(1);
+                    previousRelativePrice = relativePrice;
+                    previousPrice = price;
+                    if (currentDate.DayOfWeek == DayOfWeek.Saturday)
+                    {
+                        currentDate = currentDate.AddDays(2);
+                    }
+                    else if (currentDate.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        currentDate = currentDate.AddDays(1);
                     }
                 }
-
-
-                if (focusList.InDate == currentDate)
-                {                    
-                    focusList.AdjustedInPrice = GetAdjustedPrice(priceClient, focusList.InstrumentMarketId, focusList.InDate,price, focusList.InPrice, focusList.FocusListId, relativePrice,focusList.RelativeIndexInstrumentMarketId,false,focusList.AdjustedInPrice);
-                }
-
-                if (focusList.OutDate.HasValue && currentDate == focusList.OutDate.Value)
+                if (focusList.InstrumentMarketId == 28193 && focusList.AdjustedInPrice < 1)
                 {
-
-                    focusList.AdjustedOutPrice = GetAdjustedPrice(priceClient, focusList.InstrumentMarketId, focusList.OutDate.Value, price, focusList.OutPrice.Value, focusList.FocusListId, relativePrice, focusList.RelativeIndexInstrumentMarketId,true, focusList.AdjustedInPrice);
+                    throw new ApplicationException("Codemasters");
                 }
-
-                existingPrice.Price = GetPriceValue(price);
-                existingPrice.RelativePrice = GetPriceValue(relativePrice);              
-
-                currentDate =  currentDate.AddDays(1);
-                previousRelativePrice = relativePrice;
-                previousPrice = price;
-                if (currentDate.DayOfWeek == DayOfWeek.Saturday)
-                {
-                    currentDate = currentDate.AddDays(2);
-                }
-                else if (currentDate.DayOfWeek == DayOfWeek.Sunday)
-                {
-                    currentDate = currentDate.AddDays(1);
-                }
-            }
-            if (focusList.InstrumentMarketId == 28193 && focusList.AdjustedInPrice < 1)
-            {
-                throw new ApplicationException("Codemasters");
             }
         }
 
