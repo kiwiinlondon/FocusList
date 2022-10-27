@@ -147,7 +147,12 @@ namespace Odey.FocusList.FocusListService
             }
             if (price==null)
             {
-                if (referenceDate == DateTime.Today && !isOut)
+                DateTime previousDate = DateTime.Today.AddDays(-1);
+                while (previousDate.DayOfWeek == DayOfWeek.Saturday || previousDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    previousDate = previousDate.AddDays(-1);
+                }
+                if ((referenceDate == DateTime.Today || referenceDate == previousDate) && !isOut)
                 {
                     return inPrice;
                 }
@@ -176,14 +181,14 @@ namespace Odey.FocusList.FocusListService
             return Math.Round(GetPriceValue(price) / closingPrice.Value * focusListPrice, 6);
         }
 
-        private decimal GetPriceValue(MD.Price price)
+        private decimal GetPriceValue(MD.Price price,decimal? defaultPrice = null)
         {
             return (price.AskValue + price.BidValue) / 2;
         }
 
         public void ApplyAdjustedPricesToFocusList(PriceClient priceClient , OF.FocusList focusList, Dictionary<int, Dictionary<DateTime, MD.Price>> pricesByInstrumentMarket)
         {
-            if (focusList.InstrumentMarketId == 26539)
+            if (focusList.InstrumentMarketId == 1895)
             {
                 int i = 0;
             }
@@ -214,6 +219,7 @@ namespace Odey.FocusList.FocusListService
                     if (!prices.TryGetValue(currentDate, out var price))
                     {
                         price = previousPrice;
+                       
                     }
 
 
@@ -237,13 +243,18 @@ namespace Odey.FocusList.FocusListService
 
                         focusList.AdjustedOutPrice = GetAdjustedPrice(priceClient, focusList.InstrumentMarketId, focusList.OutDate.Value, price, focusList.OutPrice.Value, focusList.FocusListId, relativePrice, focusList.RelativeIndexInstrumentMarketId, true, focusList.AdjustedInPrice);
                     }
-
+                    previousPrice = price;
+                    previousRelativePrice = relativePrice;
+                    if (price == null)
+                    {
+                        price = prices[prices.Keys.Max()];
+                    }
                     existingPrice.Price = GetPriceValue(price);
                     existingPrice.RelativePrice = GetPriceValue(relativePrice);
 
                     currentDate = currentDate.AddDays(1);
-                    previousRelativePrice = relativePrice;
-                    previousPrice = price;
+                    
+                    
                     if (currentDate.DayOfWeek == DayOfWeek.Saturday)
                     {
                         currentDate = currentDate.AddDays(2);
