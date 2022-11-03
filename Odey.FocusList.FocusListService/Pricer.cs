@@ -188,7 +188,7 @@ namespace Odey.FocusList.FocusListService
 
         public void ApplyAdjustedPricesToFocusList(PriceClient priceClient , OF.FocusList focusList, Dictionary<int, Dictionary<DateTime, MD.Price>> pricesByInstrumentMarket)
         {
-            if (focusList.InstrumentMarketId == 1895)
+            if (focusList.InstrumentMarketId == 34315)
             {
                 int i = 0;
             }
